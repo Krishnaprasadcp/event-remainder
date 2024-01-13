@@ -7,6 +7,8 @@ interface Event extends Document{
     image:string;
     consecutiveYear:boolean;
     createdAt:Date;
+    isFeatured:boolean;
+    userId:string;
 }
 const eventSchema=new Schema<Event>({
     eventName:{
@@ -30,6 +32,12 @@ const eventSchema=new Schema<Event>({
     },
     consecutiveYear:{
         type:Boolean,
+    },
+    isFeatured:{
+        type:Boolean
+    },
+    userId:{
+        type:String
     }
 },
 {

@@ -1,3 +1,4 @@
+import connectToDatabase from "@/lib/db";
 import eventModel from "@/lib/models/event";
 import UserModel from "@/lib/models/user";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -8,14 +9,17 @@ interface Event {
     time:string;
     image:string;
     consecutiveYear:boolean;
-    // createdAt:Date;
+    isFeatured:boolean;
+    userId:string;
 }
 async function handler(req:NextApiRequest,res:NextApiResponse){
     if(req.method === "GET"){
     
     }
     if(req.method ==="POST"){
-        const {eventName,eventDiscription,date,time,image,consecutiveYear,userId} = req.body;
+        const db =await connectToDatabase();
+        const {eventName,eventDiscription,date,time,image,consecutiveYear,isFeatured,userId} = req.body;
+    
         const event =  new eventModel<Event>({
             eventName,
             eventDiscription,
@@ -23,6 +27,8 @@ async function handler(req:NextApiRequest,res:NextApiResponse){
             time,
             image,
             consecutiveYear,
+            isFeatured,
+            userId:userId
         });
         let createdEvent = await event.save();
         const updateEventId =await UserModel.findByIdAndUpdate(userId,{$push:{events:createdEvent._id}},{new:true});
