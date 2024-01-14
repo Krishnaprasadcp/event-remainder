@@ -15,8 +15,7 @@ const AuthForm:React.FC=()=>{
         }
         );
         if(!isLogin!.error){
-            console.log("going to home");
-            
+        
             router.replace("/home");
         }
         
