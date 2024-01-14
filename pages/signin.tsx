@@ -1,6 +1,8 @@
-function Signin(){
+import AuthForm from "@/components/authForm/authForm";
+import React from "react";
+const Signin:React.FC=()=>{
     return(
-        <h1>Sign in</h1>
-    );
+       <AuthForm />
+    )
 }
 export default Signin;

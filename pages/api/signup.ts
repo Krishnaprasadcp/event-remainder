@@ -1,3 +1,4 @@
+import { hashPasswordMethod } from "@/lib/auth";
 import connectToDatabase from "@/lib/db";
 import UserModel from "@/lib/models/user";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -28,13 +29,43 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           password,
           gender,
         }: Data = req.body;
+        
+        if(typeof(firstName)!=="string" || firstName == null){
+          return res.status(406).json({message:"The Entered Data is Not Valid"});
+        }
+        if(typeof(lastName)!=="string" || lastName == null){
+          return res.status(406).json({message:"The Entered Data is Not Valid"});
+        }
+        if(typeof(age)!=="number" || age == null){
+          return res.status(406).json({message:"The Entered Data is Not Valid"});
+        }
+        if(typeof(phoneNumber)!=="string" || phoneNumber == null){
+          return res.status(406).json({message:"The Entered Data is Not Valid"});
+        }
+        if(typeof(email)!=="string" || email == null){
+          return res.status(406).json({message:"The Entered Data is Not Valid"});
+        }
+        if(typeof(password)!=="string" || password == null){
+          return res.status(406).json({message:"The Entered Data is Not Valid"});
+        }
+        if(typeof(gender)!=="string" || gender == null){
+          return res.status(406).json({message:"The Entered Data is Not Valid"});
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const isValidEmail = emailRegex.test(email);
+        if(!isValidEmail){
+          return res.status(406).json({message:"The Entered Email is Not Valid"});
+        
+        }
+        const hashedPassword = await hashPasswordMethod(password);
+
         const user = await new UserModel<Data>({
           firstName,
           lastName,
           age,
           phoneNumber,
           email,
-          password,
+          password:hashedPassword,
           gender,
         });
         const userCreated: USER = await user.save();
