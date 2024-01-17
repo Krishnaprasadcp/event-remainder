@@ -1,3 +1,4 @@
+import MainNavigation from "@/components/navigation/mainNavigation";
 import { NextPage } from "next";
 import { getSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -5,16 +6,15 @@ import { useRouter } from "next/router";
 const Home: NextPage = (props): JSX.Element => {
     const router = useRouter();
     console.log(props);
-    const logoutHandler=()=>{
-        signOut();
-    }
+ 
     const profileHandler=()=>{
         router.push("/home/profile");
     }
   return(
     <div>
+        <MainNavigation />
         <h1>HomePage</h1>
-        <button onClick={logoutHandler}>Logout</button>
+        
         <button onClick={profileHandler}>Profile</button>
     </div>
   );
