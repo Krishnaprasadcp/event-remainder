@@ -1,9 +1,15 @@
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useRef, useState } from "react";
+interface ERROR{
+  statuscode:number,
+  message:string
+}
 const AuthForm: React.FC = () => {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState<Boolean>(true);
+  const [genderSelection, setGenderSelection] = useState<string>("male");
+  const [error,setError] = useState<ERROR>();
   const emailInput = useRef<HTMLInputElement>(null);
   const passwordInput = useRef<HTMLInputElement>(null);
 
@@ -13,7 +19,7 @@ const AuthForm: React.FC = () => {
   const phoneNumberInput = useRef<HTMLInputElement>(null);
   const signUpEmailInput = useRef<HTMLInputElement>(null);
   const signUpPasswordInput = useRef<HTMLInputElement>(null);
-  const genderInput = useRef<HTMLInputElement>(null);
+  const signUpReEnterPasswordInput = useRef<HTMLInputElement>(null);
 
   const signUpButtonHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -34,9 +40,60 @@ const AuthForm: React.FC = () => {
       router.replace("/home");
     }
   };
-  const signUpHandler =()=>{
+  const signUpHandler = async (event: React.FormEvent) => {
+    event.preventDefault();
+    const firstName = firstNameInput.current!.value;
+    const lastName = lastNameInput.current!.value;
+    const rawAge = ageInput.current!.value;
+    const age = parseInt(rawAge);
+    const phoneNumber = phoneNumberInput.current!.value;
+    const email = signUpEmailInput.current!.value;
+    const password = signUpPasswordInput.current!.value;
+    const userData = {
+      firstName,
+      lastName,
+      age,
+      phoneNumber,
+      email,
+      password,
+      gender: genderSelection,
+    };
 
-  }
+    const response = await fetch("http://localhost:3000/api/signup", {
+      method: "POST",
+      body: JSON.stringify(userData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      const message = response.json();
+      console.log(message);
+      
+      setError({statuscode:response.status,message:"error"})
+      console.log(response.status);
+      
+    }
+   else{
+    const data = await response.json();
+    const isLogin = await signIn("credentials",{
+      email:email,
+      password:password,
+      redirect:false
+    });
+    if(!isLogin!.error){
+      router.replace("/home");
+    }
+    
+   }
+  };
+
+  const genderSelectionHandler = (
+    event: React.FormEvent<HTMLSelectElement>
+  ) => {
+    const value = event.currentTarget.value;
+    setGenderSelection(value);
+  };
 
   return (
     <div>
@@ -73,7 +130,7 @@ const AuthForm: React.FC = () => {
             <h2>Welcome to SignUp </h2>
             <div>
               <label htmlFor="FirstName">First Name</label>
-              <input type="text" id="FirstName" ref={firstNameInput}/>
+              <input type="text" id="FirstName" ref={firstNameInput} />
             </div>
 
             <div>
@@ -83,12 +140,12 @@ const AuthForm: React.FC = () => {
 
             <div>
               <label htmlFor="age">Age</label>
-              <input type="number" id="age" ref={ageInput} />
+              <input type="text" id="age" ref={ageInput} />
             </div>
 
             <div>
               <label htmlFor="phoneNumber">Phone Number</label>
-              <input type="number" id="phoneNumber" ref={phoneNumberInput} />
+              <input type="text" id="phoneNumber" ref={phoneNumberInput} />
             </div>
 
             <div>
@@ -98,13 +155,31 @@ const AuthForm: React.FC = () => {
 
             <div>
               <label htmlFor="signUpPassword">Password</label>
-              <input type="text" id="signUpPassword" ref={signUpPasswordInput} />
+              <input
+                type="text"
+                id="signUpPassword"
+                ref={signUpPasswordInput}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="signUpReEnteredPassword">Re-Enter Password</label>
+              <input
+                type="text"
+                id="signUpReEnteredPassword"
+                ref={signUpReEnterPasswordInput}
+              />
             </div>
 
             <div>
               <label htmlFor="gender">Gender</label>
-              <select name="gender" id="gender">
-                <option value="male" >Male</option>
+              <select
+                name="gender"
+                value={genderSelection}
+                onChange={genderSelectionHandler}
+                id="gender"
+              >
+                <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="others">Others</option>
               </select>
@@ -117,6 +192,7 @@ const AuthForm: React.FC = () => {
           </div>
         </form>
       )}
+      {<p>{error?.statuscode}</p>}
     </div>
   );
 };
