@@ -5,7 +5,7 @@ export default function Document() {
     <Html lang="en">
       <Head />
         <title>Event Remainder</title>
-      <body>
+      <body className='bg-black text-white'>
         <Main />
         <NextScript />
       </body>

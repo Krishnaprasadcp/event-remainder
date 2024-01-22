@@ -13,6 +13,17 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      fontFamily:{
+        lexend:["Lexend Tera", "sans-serif"],
+        julius:["Julius Sans One","sans-serif"]
+      },
+      colors:{
+        "border-orange":"#E0AD28",
+        "inputdivcolor":"#A27936"
+      },
+      letterSpacing:{
+        "widest":"0.7em"
+      }
     },
   },
   plugins: [],

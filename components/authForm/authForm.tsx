@@ -1,15 +1,15 @@
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useRef, useState } from "react";
-interface ERROR{
-  statuscode:number,
-  message:string
+interface ERROR {
+  statuscode: number;
+  message: string;
 }
 const AuthForm: React.FC = () => {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState<Boolean>(true);
   const [genderSelection, setGenderSelection] = useState<string>("male");
-  const [error,setError] = useState<ERROR>();
+  const [error, setError] = useState<ERROR>();
   const emailInput = useRef<HTMLInputElement>(null);
   const passwordInput = useRef<HTMLInputElement>(null);
 
@@ -69,23 +69,20 @@ const AuthForm: React.FC = () => {
     if (!response.ok) {
       const message = response.json();
       console.log(message);
-      
-      setError({statuscode:response.status,message:"error"})
+
+      setError({ statuscode: response.status, message: "error" });
       console.log(response.status);
-      
+    } else {
+      const data = await response.json();
+      const isLogin = await signIn("credentials", {
+        email: email,
+        password: password,
+        redirect: false,
+      });
+      if (!isLogin!.error) {
+        router.replace("/home");
+      }
     }
-   else{
-    const data = await response.json();
-    const isLogin = await signIn("credentials",{
-      email:email,
-      password:password,
-      redirect:false
-    });
-    if(!isLogin!.error){
-      router.replace("/home");
-    }
-    
-   }
   };
 
   const genderSelectionHandler = (
@@ -99,28 +96,61 @@ const AuthForm: React.FC = () => {
     <div>
       <form onSubmit={loginSubmissionHandler}>
         {isLogin && (
-          <div>
-            <h2>Sign In </h2>
-            <div>
-              <label htmlFor="email">Email</label>
-              <input type="text" name="email" id="email" ref={emailInput} />
+          <div className="linecontainer ">
+            <div className="flex flex-col justify-between absolute  w-full h-screen">
+              <div className="flex justify-between mt-24">
+                <div className="w-1/3 h-0.5  bg-border-orange"></div>
+                <p className="text-3xl -mt-4">
+                  <span className="font-lexend tracking-widest">EVENT</span>{" "}
+                  <span className="font-julius tracking-wider font-thin">
+                    ADDER
+                  </span>
+                </p>
+                <div className="w-1/3 h-0.5 bg-border-orange "></div>
+              </div>
+              <div className=" grid grid-cols-1 place-items-center -mt-64 w-full gap-8">
+                <h2 className="text-border-orange text-3xl font-light">
+                  LOGIN
+                </h2>
+                <div className="emailinput">
+                  <input
+                    className="inputdiv"
+                    type="text"
+                    name="email"
+                    id="email"
+                    ref={emailInput}
+                    placeholder="Enter your email"
+                  />
+                </div>
+                <div className="passwordinput">
+                  <input
+                    className="inputdiv"
+                    type="text"
+                    name="password"
+                    id="password"
+                    ref={passwordInput}
+                    placeholder="Enter your password"
+                  />
+                </div>
+                <div className="rounded-md border border-border-orange w-2/5 h-9">
+                  <button className=" w-full text-start px-3" type="button">
+                    Login with google
+                  </button>
+                </div>
+
+                {isLogin && (
+                  <div className="grid grid-cols-2  gap-5 w-1/3 h-9">
+                    <button type="submit" className="border border-border-orange rounded-full">Login</button>
+                    <button type="button" className="border border-border-orange rounded-full " onClick={signUpButtonHandler}>
+                      Sign Up
+                    </button>
+                  </div>
+                )}
+              </div>
+              <div className="h-0.5 mb-24 bg-border-orange"></div>
             </div>
-            <div>
-              <label htmlFor="password">Password</label>
-              <input
-                type="text"
-                name="password"
-                id="password"
-                ref={passwordInput}
-              />
-            </div>
-            <button type="submit">Login</button>
+            <div className="h-screen w-0.5  bg-border-orange absolute right-44"></div>
           </div>
-        )}
-        {isLogin && (
-          <button type="button" onClick={signUpButtonHandler}>
-            Not a User Click here to Sign Up
-          </button>
         )}
       </form>
 
