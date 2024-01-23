@@ -11,7 +11,7 @@ const AllEvents: React.FC = () => {
       <div className="flex justify-between w-full mt-16 relative">
         <div className="mx-9 -mt-4">
           <p className="font-irish text-4xl ">
-            Welcom <div>Krishnaprasad!</div>
+            Welcom <span className="block">Krishnaprasad!</span>
           </p>
         </div>
         <div className="w-full bg-border-orange h-0.5 mt-3"></div>
