@@ -140,8 +140,17 @@ const AuthForm: React.FC = () => {
 
                 {isLogin && (
                   <div className="grid grid-cols-2  gap-5 w-1/3 h-9">
-                    <button type="submit" className="border border-border-orange rounded-full">Login</button>
-                    <button type="button" className="border border-border-orange rounded-full " onClick={signUpButtonHandler}>
+                    <button
+                      type="submit"
+                      className="border border-border-orange rounded-full"
+                    >
+                      Login
+                    </button>
+                    <button
+                      type="button"
+                      className="border border-border-orange rounded-full "
+                      onClick={signUpButtonHandler}
+                    >
                       Sign Up
                     </button>
                   </div>
@@ -156,69 +165,139 @@ const AuthForm: React.FC = () => {
 
       {!isLogin && (
         <form onSubmit={signUpHandler}>
-          <div>
-            <h2>Welcome to SignUp </h2>
-            <div>
-              <label htmlFor="FirstName">First Name</label>
-              <input type="text" id="FirstName" ref={firstNameInput} />
-            </div>
+          <div className="linecontainer ">
+            <div className="flex flex-col justify-between absolute  w-full h-screen">
+              <div className="flex justify-start mt-24">
+                <div className="w-1/3 h-0.5  bg-border-orange"></div>
+                <p className="text-3xl -mt-4 mx-9">
+                  <span className="font-lexend tracking-widest">SIGN</span>{" "}
+                  <span className="font-lexend tracking-widest">UP</span>
+                </p>
+              </div>
+              <div className=" grid grid-cols-1 place-items-center  w-full gap-8 -mt-16">
+                <div className="emailinput">
+                  <input
+                    className="signupdiv"
+                    type="text"
+                    name="email"
+                    id="email"
+                    ref={emailInput}
+                    placeholder="Enter your email"
+                  />
+                </div>
+                <div className="passwordinput">
+                  <input
+                    className="signupdiv"
+                    type="text"
+                    name="password"
+                    id="password"
+                    ref={passwordInput}
+                    placeholder="Enter your password"
+                  />
+                </div>
+                <div className="passwordinput">
+                  <input
+                    className="signupdiv"
+                    type="text"
+                    id="FirstName"
+                    ref={firstNameInput}
+                    placeholder="Enter your first name"
+                  />
+                </div>
 
-            <div>
-              <label htmlFor="lastName">Last Name</label>
-              <input type="text" id="lastName" ref={lastNameInput} />
-            </div>
+                <div className="passwordinput">
+                  <input
+                    className="signupdiv"
+                    type="text"
+                    id="lastName"
+                    ref={lastNameInput}
+                    placeholder="Last Name"
+                  />
+                </div>
 
-            <div>
-              <label htmlFor="age">Age</label>
-              <input type="text" id="age" ref={ageInput} />
-            </div>
+                <div className="passwordinput">
+                  <input
+                    className="signupdiv"
+                    type="text"
+                    id="age"
+                    ref={ageInput}
+                    placeholder="Age"
+                  />
+                </div>
 
-            <div>
-              <label htmlFor="phoneNumber">Phone Number</label>
-              <input type="text" id="phoneNumber" ref={phoneNumberInput} />
-            </div>
+                <div className="passwordinput">
+                  <input
+                    className="signupdiv"
+                    type="text"
+                    id="phoneNumber"
+                    ref={phoneNumberInput}
+                    placeholder="Phone Number"
+                  />
+                </div>
 
-            <div>
-              <label htmlFor="signUpEmail">Email</label>
-              <input type="email" id="signUpEmail" ref={signUpEmailInput} />
-            </div>
+                <div className="passwordinput">
+                  <input
+                    className="signupdiv"
+                    type="email"
+                    id="signUpEmail"
+                    ref={signUpEmailInput}
+                    placeholder="Email"
+                  />
+                </div>
 
-            <div>
-              <label htmlFor="signUpPassword">Password</label>
-              <input
-                type="text"
-                id="signUpPassword"
-                ref={signUpPasswordInput}
-              />
-            </div>
+                <div className="passwordinput">
+                  <input
+                    className="signupdiv"
+                    type="text"
+                    id="signUpPassword"
+                    ref={signUpPasswordInput}
+                    placeholder="Password"
+                  />
+                </div>
 
-            <div>
-              <label htmlFor="signUpReEnteredPassword">Re-Enter Password</label>
-              <input
-                type="text"
-                id="signUpReEnteredPassword"
-                ref={signUpReEnterPasswordInput}
-              />
-            </div>
+                <div className="passwordinput">
+                  <input
+                    className="signupdiv"
+                    type="text"
+                    id="signUpReEnteredPassword"
+                    ref={signUpReEnterPasswordInput}
+                    placeholder="Re-enter the password"
+                  />
+                </div>
 
-            <div>
-              <label htmlFor="gender">Gender</label>
-              <select
-                name="gender"
-                value={genderSelection}
-                onChange={genderSelectionHandler}
-                id="gender"
-              >
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="others">Others</option>
-              </select>
-            </div>
-            <button type="submit">Sign Up</button>
+                <div className="border border-zinc-50 rounded-md w-2/5 h-8">
+                  <label className="p-4" htmlFor="gender">Gender</label>
+                  <select
+                    className="bg-black border-none focus:border-none outline-none"
+                    name="gender"
+                    value={genderSelection}
+                    onChange={genderSelectionHandler}
+                    id="gender"
+                  >
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="others">Others</option>
+                  </select>
+                </div>
+                <div className="grid grid-cols-2 mt-5  gap-4 w-1/3 h-9">
+                  <button
+                    className="border border-border-orange rounded-full"
+                    type="submit"
+                  >
+                    Sign Up
+                  </button>
 
-            <button onClick={signInButtonHandler} type="button">
-              Are you a user ? Sign In
-            </button>
+                  <button
+                    className="border border-border-orange rounded-full "
+                    onClick={signInButtonHandler}
+                    type="button"
+                  >
+                    Are you a user ? Sign In
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="h-screen w-0.5  bg-border-orange absolute right-44"></div>
           </div>
         </form>
       )}

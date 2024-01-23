@@ -15,11 +15,12 @@ const config: Config = {
       },
       fontFamily:{
         lexend:["Lexend Tera", "sans-serif"],
-        julius:["Julius Sans One","sans-serif"]
+        julius:["Julius Sans One","sans-serif"],
+        irish:["Irish Grover","system-ui"]
       },
       colors:{
         "border-orange":"#E0AD28",
-        "inputdivcolor":"#A27936"
+        "inputdivcolor":"#966919"
       },
       letterSpacing:{
         "widest":"0.7em"
