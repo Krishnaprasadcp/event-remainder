@@ -24,6 +24,15 @@ const config: Config = {
       },
       letterSpacing:{
         "widest":"0.7em"
+      },
+      fontSize:{
+        "hoverText":"1.6rem",
+      },
+      width:{
+        "hoverImageWidth":"11.4rem",
+      },
+      height:{
+        "marginHeight":"90vh"
       }
     },
   },

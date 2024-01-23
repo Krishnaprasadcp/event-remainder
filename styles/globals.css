@@ -22,3 +22,9 @@
 .signupdiv{
   @apply bg-neutral-950 w-full rounded-md  placeholder:text-white h-9 px-4 border border-zinc-50;
 }
+.addeventdiv{
+  @apply w-10/12 text-white ;
+}
+.addeventinput{
+  @apply  bg-neutral-950 w-full rounded-md  placeholder:text-white h-9 px-4 border border-zinc-50;
+}

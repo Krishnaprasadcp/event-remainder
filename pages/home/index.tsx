@@ -22,8 +22,12 @@ const Home: NextPage = (props): JSX.Element => {
         </div>
       </div>
       <div className="mt-3">
-        
+        <div className="mb-2">
         <EventComponent />
+        <EventComponent />
+        <EventComponent />
+        </div>
+        
        
       </div>
     </>
