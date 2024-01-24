@@ -11,13 +11,14 @@ interface AllEvents{
   eventTime:string;
   imageData:string | undefined;
   isConsecutiveYear:boolean;
-}[];
+  isFeatured:boolean;
+};
 interface NAME{
   firstName:string;
   lastName:string;
 }
 interface PROPS{
- allEvents:AllEvents;
+ allEvents:AllEvents[];
  name:NAME;
 }
 const AllEvents: React.FC<PROPS>= (props:PROPS) => {
@@ -27,17 +28,14 @@ const AllEvents: React.FC<PROPS>= (props:PROPS) => {
         router.push("/home/addremainder");
     }
     const allEvents = props.allEvents;
-    console.log(allEvents[0]);
-    const userProfile = props.name;
-    console.log(userProfile);
-    
+    const userProfile = props.name;   
     
   return (
     <>
       <div className="flex justify-between w-full mt-16 relative">
-        <div className="mx-9 -mt-4">
+        <div className="w-2/4 mx-9 -mt-4">
           <p className="font-irish text-4xl ">
-            Welcom <span className="block">Krishnaprasad!</span>
+            Welcome <span className="block">{userProfile.firstName} {userProfile.lastName}!</span>
           </p>
         </div>
         <div className="w-full bg-border-orange h-0.5 mt-3"></div>
@@ -46,11 +44,13 @@ const AllEvents: React.FC<PROPS>= (props:PROPS) => {
         <button onClick={addEventButton} type="button" className="bg-inputdivcolor rounded-md px-12">ADD EVENTS</button>
       </div>
       <div className="mt-12">
-        <div className="mb-2">
-          <EventComponent />
-          <EventComponent />
-          <EventComponent />
-        </div>
+        {allEvents.map((eventDetails)=>(
+          <div className="mb-2">
+            <EventComponent eventDetails={eventDetails} />
+          </div>
+        ))}
+        
+        
       </div>
     </>
   );

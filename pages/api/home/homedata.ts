@@ -10,12 +10,13 @@ type UserData = {
 interface NoFeaturedEvents {
   firstName: string;
   lastName: string;
-  message: string;
+  isFeatured: boolean;
 }
 interface FeaturedEvents {
   featuredEvents: object[];
   firstName: string;
   lastName: string;
+  isFeatured:boolean;
 }
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
@@ -24,31 +25,35 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       if (db) {
         const { userId } = req.body;
         console.log(userId);
-        
-        const home = await UserModel.findOne({email:userId});
+
+        const home = await UserModel.findOne({ _id: userId });
         const { firstName, lastName }: UserData = home;
-        const allEventList = await eventModel.find({ userId });
+        const allEventList = await eventModel.find({ userId: userId });
+        // console.log(allEventList);
+
         if (allEventList.length > 0) {
           const featuredEvents = allEventList.filter(
             (item) => item.isFeatured === true
           );
+
           if (featuredEvents.length > 0) {
             const data: FeaturedEvents = {
               featuredEvents,
               firstName,
               lastName,
+              isFeatured:true
+            };
+            res.status(200).json(data);
+          } else {
+            const data: NoFeaturedEvents = {
+              firstName,
+              lastName,
+              isFeatured:false,
             };
             res.status(200).json(data);
           }
-        } else {
-          const data: NoFeaturedEvents = {
-            firstName,
-            lastName,
-            message: "No Featured Events",
-          };
-          res.status(200).json(data);
         }
-      } 
+      }
     } catch (error) {
       res.status(500).json({ message: "Server Error..." });
     }
