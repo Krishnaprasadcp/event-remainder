@@ -19,10 +19,7 @@ interface ERROR {
 type PROPS={
   userId:string;
 }
-type DataProps={
-  eventData:EventData|undefined;
-  userId:string;
-}
+
 const AddRemainder: React.FC<PROPS>= (props) => {
   const router = useRouter();
   const [error,setError] = useState<ERROR>();
