@@ -19,6 +19,7 @@ interface EventProps {
     isConsecutiveYear: boolean;
     isFeatured:boolean;
   };
+  starButtonHandlerIndex:(isFeature:boolean)=>void;
 }
 
 const EventComponent: React.FC<EventProps> = (props) => {
@@ -60,12 +61,12 @@ console.log({isFeatured,useState:"useState"});
 
   const starButtonHandler = async () => {
     await convertFeaturedEvent();
-    // setIsFeatured((prevState) => !prevState);
-    
+    props.starButtonHandlerIndex(isFeatured);
   };
   const unStarButtonHandler = async () => {
-    // setIsFeatured((prevState) => !prevState);
+    
     await convertFeaturedEvent();
+    props.starButtonHandlerIndex(isFeatured);
   };
   const eventNameClickHandler = () => {
     console.log("Clicked");

@@ -29,7 +29,10 @@ const AllEvents: React.FC<PROPS>= (props:PROPS) => {
     }
     const allEvents = props.allEvents;
     const userProfile = props.name;   
-    
+    const dummyHanlder = (isFeature:boolean)=>{
+      console.log("Dummy");
+      
+    }
   return (
     <>
       <div className="flex justify-between w-full mt-16 relative">
@@ -46,7 +49,7 @@ const AllEvents: React.FC<PROPS>= (props:PROPS) => {
       <div className="mt-12">
         {allEvents.map((eventDetails)=>(
           <div className="mb-2">
-            <EventComponent eventDetails={eventDetails} />
+            <EventComponent starButtonHandlerIndex={dummyHanlder} eventDetails={eventDetails} />
           </div>
         ))}
         

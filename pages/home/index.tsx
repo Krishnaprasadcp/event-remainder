@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
+
 type EVENTDATA={
   _id:string;
   eventName:string;
@@ -12,25 +13,29 @@ type EVENTDATA={
   imageData:string | undefined;
   isConsecutiveYear:boolean;
   isFeatured: boolean;
+ 
 }
 interface FeaturedEvents{
   featuredEvents:EVENTDATA[];
   isFeatured: boolean;
+  
 };
 
 interface PROPDATA {
   firstName: string;
   lastName: string;
-  
   data: FeaturedEvents;
+  
 }
 
 const Home: NextPage<PROPDATA> = (props:PROPDATA): JSX.Element => {
   const router = useRouter();
   const eventsData:FeaturedEvents = props.data;
   const event = eventsData.featuredEvents;
-  console.log(props.data.isFeatured);
-  
+
+  const starButtonHandler=(isFeature:boolean)=>{
+    router.reload() 
+  }
   return (
     <>
       <p className="font-irish text-4xl m-14">
@@ -48,9 +53,9 @@ const Home: NextPage<PROPDATA> = (props:PROPDATA): JSX.Element => {
       <div className="mt-3">
         {!props.data.isFeatured && <div className="mb-2"><p className="text-3xl text-center">No Featured Events Present</p></div>}
         {props.data.isFeatured && <div className="mb-2">
-          {event.map((eventDetails)=>(
+          {event!.map((eventDetails)=>(
         
-            <EventComponent eventDetails={eventDetails} />
+            <EventComponent starButtonHandlerIndex={starButtonHandler} eventDetails={eventDetails} />
             
           ))}
           </div>}
@@ -95,6 +100,6 @@ export const getServerSideProps = async (context: any) => {
   const data = await homeData.json();
 
   return {
-    props: { session, data },
+    props: { session, data }
   };
 };
