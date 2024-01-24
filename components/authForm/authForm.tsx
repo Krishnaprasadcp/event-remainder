@@ -175,26 +175,7 @@ const AuthForm: React.FC = () => {
                 </p>
               </div>
               <div className=" grid grid-cols-1 place-items-center  w-full gap-8 -mt-16">
-                <div className="emailinput">
-                  <input
-                    className="signupdiv"
-                    type="text"
-                    name="email"
-                    id="email"
-                    ref={emailInput}
-                    placeholder="Enter your email"
-                  />
-                </div>
-                <div className="passwordinput">
-                  <input
-                    className="signupdiv"
-                    type="text"
-                    name="password"
-                    id="password"
-                    ref={passwordInput}
-                    placeholder="Enter your password"
-                  />
-                </div>
+                
                 <div className="passwordinput">
                   <input
                     className="signupdiv"

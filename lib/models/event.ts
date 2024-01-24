@@ -1,12 +1,11 @@
 import mongoose,{Schema,Document, Date} from "mongoose";
 interface Event extends Document{
     eventName:string;
-    eventDiscription:string;
-    date:string;
-    time:string;
-    image:string;
-    consecutiveYear:boolean;
-    createdAt:Date;
+    eventDescription:string;
+    eventDate:string;
+    eventTime:string;
+    imageData:string | undefined;
+    isConsecutiveYear:boolean;
     isFeatured:boolean;
     userId:string;
 }
@@ -15,22 +14,22 @@ const eventSchema=new Schema<Event>({
         type:String,
         required:true
     },
-    eventDiscription:{
+    eventDescription:{
         type:String,
         required:true
     },
-    date:{
+    eventDate:{
         type:String,
         required:true
     },
-    time:{
+    eventTime:{
         type:String,
         required:true
     },
-    image:{
+    imageData:{
         type:String,
     },
-    consecutiveYear:{
+    isConsecutiveYear:{
         type:Boolean,
     },
     isFeatured:{

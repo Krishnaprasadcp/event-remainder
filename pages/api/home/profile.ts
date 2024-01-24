@@ -11,7 +11,10 @@ async function handler(req:NextApiRequest,res:NextApiResponse){
             const db = await connectToDatabase();
             if(db){
                 const {userId}:ID = req.body;
-                const userData = await UserModel.findById(userId);
+                console.log(userId);
+                
+                const userData = await UserModel.findOne({userId});
+                
                 res.status(200).json(userData);
             }    
         }

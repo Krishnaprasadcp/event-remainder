@@ -1,21 +1,35 @@
 import React,{useRef, useState} from "react";
-const AddEventForm: React.FC = (props) => {
+
+
+type EventData={
+    eventName:string;
+    eventDescription:string;
+    eventDate:string;
+    eventTime:string;
+    imageData:string | undefined;
+    isConsecutiveYear:boolean;
+    
+}
+type NewEventProps={
+    onAddEvent:(eventData:EventData)=>void
+}
+
+const AddEventForm: React.FC<NewEventProps>= (props) => {
     const eventNameInputRef = useRef<HTMLInputElement>(null);
     const eventDescriptionInputRef=useRef<HTMLTextAreaElement>(null);
     const eventDateInputRef=useRef<HTMLInputElement>(null);
     const eventTimeInputRef=useRef<HTMLInputElement>(null);
     
-    
     const [imageData,setImageData] = useState<string | undefined>();
     const [isConsecutiveYear,setConsecutiveYear] = useState(false);
     const formSubmitHandler=(event:React.FormEvent)=>{
         event.preventDefault();
-        const eventName = eventNameInputRef.current?.value;
-        const eventDescription = eventDescriptionInputRef.current?.value;
-        const eventDate = eventDateInputRef.current?.value;
-        const eventTime = eventTimeInputRef.current?.value;
+        const eventName = eventNameInputRef.current!.value;
+        const eventDescription = eventDescriptionInputRef.current!.value;
+        const eventDate = eventDateInputRef.current!.value;
+        const eventTime = eventTimeInputRef.current!.value;
         
-        const eventData={
+        const eventData:EventData={
             eventName,
             eventDescription,
             eventDate,
@@ -23,11 +37,11 @@ const AddEventForm: React.FC = (props) => {
             imageData,
             isConsecutiveYear
         };
-
+        props.onAddEvent(eventData);
         
     }
     const convertToBase64=(event:React.ChangeEvent<HTMLInputElement>)=>{
-       
+       event.preventDefault();
         let reader = new FileReader();
         if(event.target.files && event.target.files.length>0){
             reader.readAsDataURL(event.target.files[0]);
