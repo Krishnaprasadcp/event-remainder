@@ -21,7 +21,7 @@ interface fetchedUserProperty{
     isFeatured:boolean;
 }
 interface fetchedEventData{
-    eventData:FetchEventProperty[]
+    featuredEvents:FetchEventProperty[]; 
 }
 export const fetchEventData = (userId:string)=>{
     return async (dispatch:AppDispatch)=>{
@@ -41,9 +41,14 @@ export const fetchEventData = (userId:string)=>{
             return eventData;
         }
         try{
-            const data = await fetchData();
-            console.log(data.firstName);
-            
+            const data:fetchedEventData & fetchedUserProperty = await fetchData();
+            const {firstName,lastName,isFeatured} = data;
+            const featuredEvents = data.featuredEvents;
+            console.log();
+            // console.log();
+            if(featuredEvents.length>0){
+                dispatch(eventSliceActions.replaceHomeEvents(featuredEvents))
+            }
             // const eventData={
             //     _id:data._id,
             //     eventName:data.eventName,

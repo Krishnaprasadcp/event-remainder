@@ -8,6 +8,7 @@ type UserData = {
   lastName: string;
 };
 interface NoFeaturedEvents {
+  featuredEvents:[];
   firstName: string;
   lastName: string;
   isFeatured: boolean;
@@ -46,6 +47,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             res.status(200).json(data);
           } else {
             const data: NoFeaturedEvents = {
+              featuredEvents:[],
               firstName,
               lastName,
               isFeatured:false,

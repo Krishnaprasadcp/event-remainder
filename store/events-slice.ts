@@ -7,34 +7,25 @@ interface EventProperty{
     imageData:string | undefined;
     isConsecutiveYear:boolean;
 }
-interface FetchEventProperty{
-    _id:string;
-  eventName:string;
-  eventDescription:string;
-  eventDate:string;
-  eventTime:string;
-  imageData:string | undefined;
-  isConsecutiveYear:boolean;
-  isFeatured: boolean;
-}
+
 interface RecievedFetchData{
     _id:string;
-  eventName:string;
-  eventDescription:string;
-  eventDate:string;
-  eventTime:string;
-  imageData:string | undefined;
-  isConsecutiveYear:boolean;
-  isFeatured: boolean;
-  userId:string;
+    eventName:string;
+    eventDescription:string;
+    eventDate:string;
+    eventTime:string;
+    imageData:string | undefined;
+    isConsecutiveYear:boolean;
+    isFeatured: boolean;
+    userId:string;
+    createdAt:string;
+    updatedAt:string;
 }
 interface EventsState{
-    events:EventProperty[],
-    fetchedEvents: RecievedFetchData[]
+    events:RecievedFetchData[],
 }
 const initialEventsState:EventsState = {
-    events:[],
-    fetchedEvents:[]
+    events:[]
 }
 const eventsSlice = createSlice({
     name:"events",
@@ -45,8 +36,9 @@ const eventsSlice = createSlice({
 
             // })
         },
-        replaceHomeEvents:(state,action:PayloadAction<RecievedFetchData>)=>{
-            state.fetchedEvents = action.payload
+        replaceHomeEvents:(state,action:PayloadAction<RecievedFetchData[]>)=>{
+           state.events= action.payload
+           
         }
     }
 });

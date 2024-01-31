@@ -34,8 +34,9 @@ const Home: NextPage<PROPDATA> = (props:PROPDATA): JSX.Element => {
   const dispatch = useAppDispatch();
   const userId = props.userId;
   
-  const eventData = useAppSelector(state=>state.events);
-
+  const eventData = useAppSelector(state=>state.events.events);
+  console.log(eventData);
+  
   useEffect(()=>{
     dispatch(fetchEventData(userId))
   },[dispatch])
@@ -55,14 +56,14 @@ const Home: NextPage<PROPDATA> = (props:PROPDATA): JSX.Element => {
         </div>
       </div>
       <div className="mt-3">
-        {/* {!props.data.isFeatured && <div className="mb-2"><p className="text-3xl text-center">No Featured Events Present</p></div>}
-        {props.data.isFeatured && <div className="mb-2">
-          {event!.map((eventDetails)=>(
+        {eventData.length<0 && <div className="mb-2"><p className="text-3xl text-center">No Featured Events Present</p></div>}
+        {eventData.length>0 && <div className="mb-2">
+          {eventData.map((eventDetails)=>(
         
             <EventComponent eventDetails={eventDetails} />
             
           ))}
-          </div>} */}
+          </div>}
       </div>
     </>
   );
