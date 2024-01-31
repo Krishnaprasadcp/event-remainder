@@ -76,6 +76,7 @@ export const getServerSideProps = async (context:GetServerSidePropsContext)=>{
   
 
   const fetchedResponse:Response = await fetch("http://localhost:3000/api/home/getUserId",{
+    next:{revalidate:1},
     method:"POST",
     body:JSON.stringify({email}),
     headers:{
@@ -90,6 +91,7 @@ export const getServerSideProps = async (context:GetServerSidePropsContext)=>{
   const name = {firstName,lastName};
   
   const fetchedEventsresponse:Response = await fetch("http://localhost:3000/api/home/events",{
+    next:{revalidate:1},
     method:"POST",
     body:JSON.stringify({userId}),
     headers:{
@@ -101,6 +103,8 @@ export const getServerSideProps = async (context:GetServerSidePropsContext)=>{
     
   }
   const allEvents = await fetchedEventsresponse.json();  
+  console.log("hii");
+  
   return{
     props:{
       allEvents,

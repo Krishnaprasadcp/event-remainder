@@ -1,7 +1,10 @@
 import EventComponent from "@/components/events/EventComponent";
+import { fetchEventData } from "@/store/events-action";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { NextPage } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 
 type EVENTDATA={
@@ -22,20 +25,21 @@ interface FeaturedEvents{
 };
 
 interface PROPDATA {
-  firstName: string;
-  lastName: string;
+  userId:string;
   data: FeaturedEvents;
   
 }
 
 const Home: NextPage<PROPDATA> = (props:PROPDATA): JSX.Element => {
-  const router = useRouter();
-  const eventsData:FeaturedEvents = props.data;
-  const event = eventsData.featuredEvents;
+  const dispatch = useAppDispatch();
+  const userId = props.userId;
+  
+  const eventData = useAppSelector(state=>state.events);
 
-  const starButtonHandler=(isFeature:boolean)=>{
-    router.reload() 
-  }
+  useEffect(()=>{
+    dispatch(fetchEventData(userId))
+  },[dispatch])
+
   return (
     <>
       <p className="font-irish text-4xl m-14">
@@ -51,14 +55,14 @@ const Home: NextPage<PROPDATA> = (props:PROPDATA): JSX.Element => {
         </div>
       </div>
       <div className="mt-3">
-        {!props.data.isFeatured && <div className="mb-2"><p className="text-3xl text-center">No Featured Events Present</p></div>}
+        {/* {!props.data.isFeatured && <div className="mb-2"><p className="text-3xl text-center">No Featured Events Present</p></div>}
         {props.data.isFeatured && <div className="mb-2">
           {event!.map((eventDetails)=>(
         
-            <EventComponent starButtonHandlerIndex={starButtonHandler} eventDetails={eventDetails} />
+            <EventComponent eventDetails={eventDetails} />
             
           ))}
-          </div>}
+          </div>} */}
       </div>
     </>
   );
@@ -75,31 +79,9 @@ export const getServerSideProps = async (context: any) => {
       },
     };
   }
-  const email = session.user!.email;
-
-  const userIdResponse = await fetch(
-    "http://localhost:3000/api/home/getUserId",
-    {
-      method: "POST",
-      body: JSON.stringify({ email }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  const userData = await userIdResponse.json();
-  const userId = userData.userId;
-
-  const homeData = await fetch("http://localhost:3000/api/home/homedata", {
-    method: "POST",
-    body: JSON.stringify({ userId }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const data = await homeData.json();
+  const userId = session.user!.name;
 
   return {
-    props: { session, data }
+    props: { userId }
   };
 };

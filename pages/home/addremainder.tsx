@@ -1,4 +1,6 @@
 import AddEventForm from "@/components/addEventForm/addEventForm";
+import { eventSliceActions } from "@/store/events-slice";
+import { useAppDispatch } from "@/store/hooks";
 import { GetServerSidePropsContext } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -21,27 +23,32 @@ type PROPS={
 }
 
 const AddRemainder: React.FC<PROPS>= (props) => {
+  console.log(props);
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const [error,setError] = useState<ERROR>();
   const addEventHandler =async (eventData:EventData)=>{
+    dispatch(eventSliceActions.addEvents(eventData))
+    
 
-    const data = {
-      eventData,
-      userId:props.userId
-    }
+    
+    // const data = {
+    //   eventData,
+    //   userId:props.userId
+    // }
 
-    const response = await fetch("/api/home/addevent",{
-      method:"POST",
-      body:JSON.stringify({data}),
-      headers:{
-        "Content-Type":"application/json"
-      }
-    });
-    if(!response.ok){
-      const errorMessage =await response.json();
-      setError({statusCode:response.status,message:"Cant enter event"})
-    }
-    router.push("/home/allevents");
+    // const response = await fetch("/api/home/addevent",{
+    //   method:"POST",
+    //   body:JSON.stringify({data}),
+    //   headers:{
+    //     "Content-Type":"application/json"
+    //   }
+    // });
+    // if(!response.ok){
+    //   const errorMessage =await response.json();
+    //   setError({statusCode:response.status,message:"Cant enter event"})
+    // }
+    // router.push("/home/allevents");
   }
     
   
@@ -63,6 +70,7 @@ export default AddRemainder;
 
 export const getServerSideProps = async (context:GetServerSidePropsContext)=>{
   const session = await getSession({req:context.req});
+
   if(!session){
     return{
       redirect:{
@@ -71,24 +79,24 @@ export const getServerSideProps = async (context:GetServerSidePropsContext)=>{
       }
     };
   }
-  const email = session.user!.email;
-  const response  = await fetch("http://localhost:3000/api/home/profile",{
-    method:"POST",
-    body:JSON.stringify({email}),
-    headers:{
-      "Content-Type":"application/json"
-    }
-  });
-  if(!response.ok){
-    console.log("Not find an email");
+  // const email = session.user!.email;
+  // const response  = await fetch("http://localhost:3000/api/home/profile",{
+  //   method:"POST",
+  //   body:JSON.stringify({email}),
+  //   headers:{
+  //     "Content-Type":"application/json"
+  //   }
+  // });
+  // if(!response.ok){
+  //   console.log("Not find an email");
     
-  }
-  const returnedData = await response.json();
-  const userId = returnedData._id;
+  // }
+  // const returnedData = await response.json();
+  // const userId = returnedData._id;
   
   return{
     props:{
-      userId
+      session
     }
   };
 }

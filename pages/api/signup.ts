@@ -2,8 +2,7 @@ import { hashPasswordMethod } from "@/lib/auth";
 import connectToDatabase from "@/lib/db";
 import UserModel from "@/lib/models/user";
 import { NextApiRequest, NextApiResponse } from "next";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/router";
+
 interface Data {
   firstName: string;
   lastName: string;

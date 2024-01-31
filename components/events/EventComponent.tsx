@@ -7,7 +7,6 @@ import { faStarOfDavid } from "@fortawesome/free-solid-svg-icons";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
 
-
 interface EventProps {
   eventDetails: {
     _id: string;
@@ -17,9 +16,9 @@ interface EventProps {
     eventTime: string;
     imageData: string | undefined;
     isConsecutiveYear: boolean;
-    isFeatured:boolean;
+    isFeatured: boolean;
   };
-  starButtonHandlerIndex:(isFeature:boolean)=>void;
+  starButtonHandlerIndex: (isFeature: boolean) => void;
 }
 
 const EventComponent: React.FC<EventProps> = (props) => {
@@ -27,13 +26,14 @@ const EventComponent: React.FC<EventProps> = (props) => {
   const urlPath = router.pathname;
   const event = props.eventDetails;
   const [isFeatured, setIsFeatured] = useState<boolean>(event.isFeatured);
+  const [deleteButton, setDeleteButton] = useState(false);
+  console.log({ isFeatured, useState: "useState" });
+  console.log({deleteButtontext:"delebutton",deleteButton});
   
-console.log({isFeatured,useState:"useState"});
-
   const convertFeaturedEvent = async () => {
     const querry = {
       userId: event._id,
-      isFeatured:isFeatured,
+      isFeatured: isFeatured,
     };
     try {
       const response = await fetch(
@@ -51,28 +51,53 @@ console.log({isFeatured,useState:"useState"});
       }
       const data = await response.json();
       setIsFeatured(data.isFeatured);
-      console.log({isFeatured,functiom:"function"});
+      console.log({ isFeatured, functiom: "function" });
     } catch (error) {
       console.log("Update error");
     }
   };
-  
-
 
   const starButtonHandler = async () => {
     await convertFeaturedEvent();
     props.starButtonHandlerIndex(isFeatured);
   };
   const unStarButtonHandler = async () => {
-    
     await convertFeaturedEvent();
     props.starButtonHandlerIndex(isFeatured);
   };
   const eventNameClickHandler = () => {
     console.log("Clicked");
   };
-  const deleteButtonHandler = () => {
-    console.log("deleted");
+
+  useEffect(() => {
+    async function deleteFunction() {
+      if (deleteButton === true) {
+        const eventId = event._id;
+        console.log(eventId);
+        
+        const response = await fetch("http://localhost:3000/api/home/events", {
+          method: "DELETE",
+          body: JSON.stringify({ eventId }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (!response.ok) {
+          console.log("Somthing went Wrong");
+        }
+        const deletedEvent = await response.json();
+        console.log(deletedEvent);
+        setDeleteButton(false);
+        // router.reload();
+        console.log(deleteButton);
+        
+        
+      }
+    }
+    deleteFunction();
+  }, [deleteButton]);
+  const deleteButtonHandler = async () => {
+    setDeleteButton(true);
   };
   const bgColor = urlPath === "/home" ? "bg-zinc-900" : "bg-yellow-600";
 

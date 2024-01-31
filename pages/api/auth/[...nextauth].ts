@@ -31,10 +31,12 @@ const authOptions: NextAuthOptions = {
         if (!isValid) {
           throw new Error("Password is incorrect...");
         }
-        return {
-          id: userData._id.toString(),
-          email: email,
-        };
+      
+        
+        const user = {id:userData._id.toString(),email:email,name:userData._id.toString()}
+        console.log(user);
+        
+        return user;
       },
     }),
   ],

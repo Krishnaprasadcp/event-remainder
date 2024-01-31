@@ -19,15 +19,14 @@ async function handler(req:NextApiRequest,res:NextApiResponse){
     }
     if(req.method ==="POST"){
         const db =await connectToDatabase();
-        const {data} =await req.body;
-        console.log("hii");
-        
+        const data =await req.body;
     
-        const{eventData,userId} =await data;
+        // const{eventData} =await data;
         
-        console.log(eventData);
+        // console.log(eventData);
+        console.log(data);
         
-        const {eventName,eventDescription,eventDate,eventTime,imageData,isConsecutiveYear} = eventData;
+        const {eventName,eventDescription,eventDate,eventTime,imageData,isConsecutiveYear,userId} = data;
         console.log(eventName);
         
         const event =  new eventModel<EventData>({
@@ -37,7 +36,7 @@ async function handler(req:NextApiRequest,res:NextApiResponse){
             eventTime,
             imageData,
             isConsecutiveYear,
-            isFeatured:false,
+            isFeatured:true,
             userId:userId
             
         });

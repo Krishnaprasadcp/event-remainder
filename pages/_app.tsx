@@ -1,18 +1,22 @@
 import Layout from '@/components/Layout/Layout'
+import store from '@/store';
 import '@/styles/globals.css'
 import { SessionProvider } from 'next-auth/react'
 import type { AppProps } from 'next/app'
 import { Fragment } from 'react';
+import { Provider } from 'react-redux';
 
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Fragment>
-      <SessionProvider session={pageProps.session}>
+     <Provider store={store}>
+     <SessionProvider session={pageProps.session}>
         <Layout>
         <Component {...pageProps} />
         </Layout>
     </SessionProvider>
+     </Provider>
     </Fragment>
   )
 }
