@@ -19,6 +19,9 @@ interface FeaturedEvents {
   lastName: string;
   isFeatured:boolean;
 }
+interface Message{
+  message:string;
+}
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     try {
@@ -54,6 +57,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             };
             res.status(200).json(data);
           }
+        }
+        else{
+    
+          res.status(200).json({message:"No Event Found"});
         }
       }
     } catch (error) {

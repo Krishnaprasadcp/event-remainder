@@ -19,15 +19,13 @@ async function handler(req:NextApiRequest,res:NextApiResponse){
     }
     if(req.method ==="POST"){
         const db =await connectToDatabase();
-        const data =await req.body;
+        const data = req.body;
+        const userId = data.userId;
+        const {eventName,eventDescription,eventDate,eventTime,imageData,isConsecutiveYear} = data.eventData;
     
-        // const{eventData} =await data;
+        console.log(userId);
+        console.log(eventDate);
         
-        // console.log(eventData);
-        console.log(data);
-        
-        const {eventName,eventDescription,eventDate,eventTime,imageData,isConsecutiveYear,userId} = data;
-        console.log(eventName);
         
         const event =  new eventModel<EventData>({
             eventName,
@@ -36,7 +34,7 @@ async function handler(req:NextApiRequest,res:NextApiResponse){
             eventTime,
             imageData,
             isConsecutiveYear,
-            isFeatured:true,
+            isFeatured:false,
             userId:userId
             
         });
@@ -44,12 +42,14 @@ async function handler(req:NextApiRequest,res:NextApiResponse){
         try {
             let createdEvent = await event.save();
             const updateEventId =await UserModel.findByIdAndUpdate(userId,{$push:{events:createdEvent._id}},{new:true});
+            console.log(createdEvent);
+            res.status(200).json(createdEvent);
         } 
         catch (error) {
             res.status(404).json({message:"Cant enter the event"})
         }
         
-        res.status(200).json({message:"succsess"});
+        
     }
 }
 export default handler;

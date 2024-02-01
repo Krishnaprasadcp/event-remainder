@@ -1,10 +1,10 @@
 import EventComponent from "@/components/events/EventComponent";
-import { fetchEventData } from "@/store/events-action";
+import { fetchAllEventData } from "@/store/events-action";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { NextPage } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 
 
 type EVENTDATA={
@@ -34,13 +34,12 @@ const Home: NextPage<PROPDATA> = (props:PROPDATA): JSX.Element => {
   const dispatch = useAppDispatch();
   const userId = props.userId;
   
-  const eventData = useAppSelector(state=>state.events.events);
-  console.log(eventData);
+  const allData = useAppSelector(state=>state.events.allEvents);
   
   useEffect(()=>{
-    dispatch(fetchEventData(userId))
+    dispatch(fetchAllEventData(userId))
   },[dispatch])
-
+  let eventData = allData.filter(event=>event.isFeatured === true);
   return (
     <>
       <p className="font-irish text-4xl m-14">
@@ -56,12 +55,12 @@ const Home: NextPage<PROPDATA> = (props:PROPDATA): JSX.Element => {
         </div>
       </div>
       <div className="mt-3">
-        {eventData.length<0 && <div className="mb-2"><p className="text-3xl text-center">No Featured Events Present</p></div>}
+        {eventData.length<=0 && <div className="mb-2"><p className="text-3xl text-center">No Featured Events Added</p></div>}
         {eventData.length>0 && <div className="mb-2">
           {eventData.map((eventDetails)=>(
-        
-            <EventComponent eventDetails={eventDetails} />
-            
+            <Fragment key={eventDetails._id}>
+              <EventComponent eventDetails={eventDetails} />
+            </Fragment>
           ))}
           </div>}
       </div>

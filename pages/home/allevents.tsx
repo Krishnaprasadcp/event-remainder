@@ -1,44 +1,49 @@
 import EventComponent from "@/components/events/EventComponent";
+import { fetchAllEventData } from "@/store/events-action";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { GetServerSidePropsContext } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 interface AllEvents{
-  _id:string;
-  eventName:string;
-  eventDescription:string;
-  eventDate:string;
-  eventTime:string;
-  imageData:string | undefined;
-  isConsecutiveYear:boolean;
-  isFeatured:boolean;
+  _id: string;
+  eventName: string;
+  eventDescription: string;
+  eventDate: string;
+  eventTime: string;
+  imageData: string | undefined;
+  isConsecutiveYear: boolean;
+  isFeatured: boolean;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
 };
 interface NAME{
   firstName:string;
   lastName:string;
 }
 interface PROPS{
- allEvents:AllEvents[];
- name:NAME;
+ userId:string;
 }
 const AllEvents: React.FC<PROPS>= (props:PROPS) => {
+  const dispatch = useAppDispatch();
+  const eventData = useAppSelector(state=>state.events.allEvents);
+  console.log(eventData);
   
+  const userId = props.userId;
+    // useEffect(()=>{
+    //   dispatch(fetchAllEventData(userId));
+    // },[dispatch])
     const router = useRouter();
     const addEventButton = ()=>{
         router.push("/home/addremainder");
-    }
-    const allEvents = props.allEvents;
-    const userProfile = props.name;   
-    const dummyHanlder = (isFeature:boolean)=>{
-      console.log("Dummy");
-      
     }
   return (
     <>
       <div className="flex justify-between w-full mt-16 relative">
         <div className="w-2/4 mx-9 -mt-4">
           <p className="font-irish text-4xl ">
-            Welcome <span className="block">{userProfile.firstName} {userProfile.lastName}!</span>
+            Welcome <span className="block">Kp</span>
           </p>
         </div>
         <div className="w-full bg-border-orange h-0.5 mt-3"></div>
@@ -47,9 +52,9 @@ const AllEvents: React.FC<PROPS>= (props:PROPS) => {
         <button onClick={addEventButton} type="button" className="bg-inputdivcolor rounded-md px-12">ADD EVENTS</button>
       </div>
       <div className="mt-12">
-        {allEvents.map((eventDetails)=>(
-          <div className="mb-2">
-            <EventComponent starButtonHandlerIndex={dummyHanlder} eventDetails={eventDetails} />
+        {eventData.map((eventDetails)=>(
+          <div key={eventDetails._id} className="mb-2">
+            <EventComponent eventDetails={eventDetails} />
           </div>
         ))}
         
@@ -71,44 +76,12 @@ export const getServerSideProps = async (context:GetServerSidePropsContext)=>{
       }
     }
   };
-  const email = session.user!.email;
-  console.log(email);
+  const userId= session.user!.name;
   
-
-  const fetchedResponse:Response = await fetch("http://localhost:3000/api/home/getUserId",{
-    next:{revalidate:1},
-    method:"POST",
-    body:JSON.stringify({email}),
-    headers:{
-      "Content-Type":"application/json"
-    }
-  });
-  if(!fetchedResponse.ok){
-    console.log("Error");
-    
-  }
-  const {userId,firstName,lastName} = await fetchedResponse.json();
-  const name = {firstName,lastName};
-  
-  const fetchedEventsresponse:Response = await fetch("http://localhost:3000/api/home/events",{
-    next:{revalidate:1},
-    method:"POST",
-    body:JSON.stringify({userId}),
-    headers:{
-      "Content-Type":"application/json"
-    }
-  });
-  if(!fetchedResponse.ok){
-    console.log("Error");
-    
-  }
-  const allEvents = await fetchedEventsresponse.json();  
-  console.log("hii");
-  
+ 
   return{
     props:{
-      allEvents,
-      name
+      userId
     }
   };
 }

@@ -1,64 +1,60 @@
 import AddEventForm from "@/components/addEventForm/addEventForm";
+import { fetchAllEventData } from "@/store/events-action";
 import { eventSliceActions } from "@/store/events-slice";
-import { useAppDispatch } from "@/store/hooks";
-import { GetServerSidePropsContext } from "next";
+import { GetServerSidePropsContext, NextPage } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
-interface EventData{
-  eventName:string;
-  eventDescription:string;
-  eventDate:string;
-  eventTime:string;
-  imageData:string | undefined;
-  isConsecutiveYear:boolean;
-  
+
+import React from "react";
+import { useDispatch } from "react-redux";
+interface EventData {
+  eventName: string;
+  eventDescription: string;
+  eventDate: string;
+  eventTime: string;
+  imageData: string | undefined;
+  isConsecutiveYear: boolean;
 }
 interface ERROR {
   statusCode: number;
   message: string;
 }
-type PROPS={
-  userId:string;
+type PROPS = {
+  userId: string;
+};
+interface SendDataProp {
+  formData: EventData;
+  userId: string;
+  // Add other properties as needed
 }
-
-const AddRemainder: React.FC<PROPS>= (props) => {
-  console.log(props);
-  const dispatch = useAppDispatch();
+const AddRemainder: NextPage<PROPS> = (props) => {
   const router = useRouter();
-  const [error,setError] = useState<ERROR>();
-  const addEventHandler =async (eventData:EventData)=>{
-    dispatch(eventSliceActions.addEvents(eventData))
-    
-
-    
-    // const data = {
-    //   eventData,
-    //   userId:props.userId
-    // }
-
-    // const response = await fetch("/api/home/addevent",{
-    //   method:"POST",
-    //   body:JSON.stringify({data}),
-    //   headers:{
-    //     "Content-Type":"application/json"
-    //   }
-    // });
-    // if(!response.ok){
-    //   const errorMessage =await response.json();
-    //   setError({statusCode:response.status,message:"Cant enter event"})
-    // }
-    // router.push("/home/allevents");
-  }
-    
+  const userId = props.userId;
+  const dispatch = useDispatch();
   
-
+  const addEventHandler = async (eventData: EventData) => {
+    console.log({userId,eventData});
+    const response = await fetch("http://localhost:3000/api/home/addevent", {
+        method: "POST",
+        body: JSON.stringify({ userId, eventData }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        console.log("Cant insert the event");
+      }
+      const returnedData = await response.json();
+      console.log(returnedData);
+      dispatch(eventSliceActions.addEvent(returnedData));
+      router.push("/home/allevents");
+  };
   
   return (
     <>
       <div className="relative ">
         <div className="absolute h-marginHeight w-full">
-        <AddEventForm onAddEvent={addEventHandler}/>
+          <AddEventForm onAddEvent={addEventHandler} />
           <div className="w-2/6 right-4 bottom-16 h-0.5 absolute  bg-border-orange "></div>
           <div className="h-2/6 right-16 absolute bottom-0  w-0.5 bg-border-orange  "></div>
         </div>
@@ -68,35 +64,24 @@ const AddRemainder: React.FC<PROPS>= (props) => {
 };
 export default AddRemainder;
 
-export const getServerSideProps = async (context:GetServerSidePropsContext)=>{
-  const session = await getSession({req:context.req});
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const session = await getSession({ req: context.req });
 
-  if(!session){
-    return{
-      redirect:{
-        destination:"/signin",
-        permanent:false
-      }
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
     };
   }
-  // const email = session.user!.email;
-  // const response  = await fetch("http://localhost:3000/api/home/profile",{
-  //   method:"POST",
-  //   body:JSON.stringify({email}),
-  //   headers:{
-  //     "Content-Type":"application/json"
-  //   }
-  // });
-  // if(!response.ok){
-  //   console.log("Not find an email");
-    
-  // }
-  // const returnedData = await response.json();
-  // const userId = returnedData._id;
-  
-  return{
-    props:{
-      session
-    }
+  const userId = session.user!.name;
+
+  return {
+    props: {
+      userId,
+    },
   };
-}
+};

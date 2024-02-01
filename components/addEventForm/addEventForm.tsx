@@ -1,64 +1,58 @@
-import React,{useRef, useState} from "react";
+import React, { useRef, useState } from "react";
 
+type EventData = {
+  eventName: string;
+  eventDescription: string;
+  eventDate: string;
+  eventTime: string;
+  imageData: string | undefined;
+  isConsecutiveYear: boolean;
+};
+type NewEventProps = {
+  onAddEvent: (eventData: EventData) => void;
+};
 
-type EventData={
-    eventName:string;
-    eventDescription:string;
-    eventDate:string;
-    eventTime:string;
-    imageData:string | undefined;
-    isConsecutiveYear:boolean;
-    
-}
-type NewEventProps={
-    onAddEvent:(eventData:EventData)=>void
-}
+const AddEventForm: React.FC<NewEventProps> = (props) => {
+  const eventNameInputRef = useRef<HTMLInputElement>(null);
+  const eventDescriptionInputRef = useRef<HTMLTextAreaElement>(null);
+  const eventDateInputRef = useRef<HTMLInputElement>(null);
+  const eventTimeInputRef = useRef<HTMLInputElement>(null);
 
-const AddEventForm: React.FC<NewEventProps>= (props) => {
-    const eventNameInputRef = useRef<HTMLInputElement>(null);
-    const eventDescriptionInputRef=useRef<HTMLTextAreaElement>(null);
-    const eventDateInputRef=useRef<HTMLInputElement>(null);
-    const eventTimeInputRef=useRef<HTMLInputElement>(null);
-    
-    const [imageData,setImageData] = useState<string | undefined>();
-    const [isConsecutiveYear,setConsecutiveYear] = useState(false);
-    const formSubmitHandler=(event:React.FormEvent)=>{
-        event.preventDefault();
-        const eventName = eventNameInputRef.current!.value;
-        const eventDescription = eventDescriptionInputRef.current!.value;
-        const eventDate = eventDateInputRef.current!.value;
-        const eventTime = eventTimeInputRef.current!.value;
-        
-        const eventData:EventData={
-            eventName,
-            eventDescription,
-            eventDate,
-            eventTime,
-            imageData,
-            isConsecutiveYear
-        };
-        props.onAddEvent(eventData);
-        
+  const [imageData, setImageData] = useState<string | undefined>();
+  const [isConsecutiveYear, setConsecutiveYear] = useState(false);
+  const formSubmitHandler = (event: React.FormEvent) => {
+    event.preventDefault();
+    const eventName = eventNameInputRef.current!.value;
+    const eventDescription = eventDescriptionInputRef.current!.value;
+    const eventDate = eventDateInputRef.current!.value;
+    const eventTime = eventTimeInputRef.current!.value;
+
+    const eventData: EventData = {
+      eventName,
+      eventDescription,
+      eventDate,
+      eventTime,
+      imageData,
+      isConsecutiveYear,
+    };
+    props.onAddEvent(eventData);
+  };
+  const convertToBase64 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    let reader = new FileReader();
+    if (event.target.files && event.target.files.length > 0) {
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = () => {
+        setImageData(reader.result as string);
+      };
+      reader.onerror = (error) => {
+        console.log("Error", error);
+      };
     }
-    const convertToBase64=(event:React.ChangeEvent<HTMLInputElement>)=>{
-       event.preventDefault();
-        let reader = new FileReader();
-        if(event.target.files && event.target.files.length>0){
-            reader.readAsDataURL(event.target.files[0]);
-            reader.onload=()=>{
-                setImageData(reader.result as string)
-                 
-            };
-            reader.onerror = error=>{
-                console.log("Error",error);
-                
-            }
-        }
-       
-    }
-    const consecutiveYaerCheckBoxHandler = ()=>{
-        setConsecutiveYear((prevState)=>!prevState);
-    }
+  };
+  const consecutiveYaerCheckBoxHandler = () => {
+    setConsecutiveYear((prevState) => !prevState);
+  };
   return (
     <div className=" w-full">
       <form onSubmit={formSubmitHandler}>
@@ -76,7 +70,7 @@ const AddEventForm: React.FC<NewEventProps>= (props) => {
               className="addeventinput "
               type="text"
               id="eventname"
-                ref={eventNameInputRef}
+              ref={eventNameInputRef}
               placeholder="Event name"
             />
           </div>
@@ -85,7 +79,7 @@ const AddEventForm: React.FC<NewEventProps>= (props) => {
               className="addeventinput"
               rows={3}
               id="eventdescription"
-                ref={eventDescriptionInputRef}
+              ref={eventDescriptionInputRef}
               placeholder="Event Description"
             />
           </div>
@@ -94,7 +88,7 @@ const AddEventForm: React.FC<NewEventProps>= (props) => {
               className="addeventinput"
               type="date"
               id="date"
-                ref={eventDateInputRef}
+              ref={eventDateInputRef}
               placeholder="Date"
             />
           </div>
@@ -103,7 +97,7 @@ const AddEventForm: React.FC<NewEventProps>= (props) => {
               className="addeventinput"
               type="time"
               id="time"
-                ref={eventTimeInputRef}
+              ref={eventTimeInputRef}
               placeholder="Time"
             />
           </div>
@@ -113,8 +107,6 @@ const AddEventForm: React.FC<NewEventProps>= (props) => {
               accept="image/*"
               type="file"
               id="image"
-               
-              
               onChange={convertToBase64}
             />
           </div>
@@ -136,11 +128,12 @@ const AddEventForm: React.FC<NewEventProps>= (props) => {
           </div>
         </div>
       </form>
-      
     </div>
   );
 };
 export default AddEventForm;
-{/* <div>
+{
+  /* <div>
         {imageData=="" || imageData==undefined ?"":<img src={imageData} alt="image" width={200} height={200} />}
-      </div> */}
+      </div> */
+}

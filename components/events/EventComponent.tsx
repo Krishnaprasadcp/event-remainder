@@ -6,6 +6,8 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStarOfDavid } from "@fortawesome/free-solid-svg-icons";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { eventSliceActions } from "@/store/events-slice";
 
 interface EventProps {
   eventDetails:{
@@ -25,45 +27,46 @@ interface EventProps {
 
 const EventComponent: React.FC<EventProps> = (props) => {
   const router = useRouter();
+
   const urlPath = router.pathname;
   const event = props.eventDetails;
+  const dispatch =useAppDispatch();
+  const isFetaurSelector = useAppSelector(state=>state.events.isFeatured);
   // const [isFeatured, setIsFeatured] = useState<boolean>(event.isFeatured);
   const [deleteButton, setDeleteButton] = useState(false);
-  // console.log({ isFeatured, useState: "useState" });
-  // console.log({ deleteButtontext: "delebutton", deleteButton });
-
-  // const convertFeaturedEvent = async () => {
-  //   const querry = {
-  //     userId: event._id,
-  //     isFeatured: isFeatured,
-  //   };
-  //   try {
-  //     const response = await fetch(
-  //       "http://localhost:3000/api/home/featuredEvent",
-  //       {
-  //         method: "PATCH",
-  //         body: JSON.stringify({ querry }),
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     if (!response.ok) {
-  //       console.log("Cant update");
-  //     }
-  //     const data = await response.json();
-  //     setIsFeatured(data.isFeatured);
-  //     console.log({ isFeatured, functiom: "function" });
-  //   } catch (error) {
-  //     console.log("Update error");
-  //   }
-  // };
 
   const starButtonHandler = async () => {
-    
+    dispatch(eventSliceActions.isFeatured({id:event._id,isFeatured:event.isFeatured}));
+    // console.log();
+    // const querry = {
+    //       userId: ,
+    //       isFeatured: isFeatured,
+    //     };
+    //     try {
+    //       const response = await fetch(
+    //         "http://localhost:3000/api/home/featuredEvent",
+    //         {
+    //           method: "PATCH",
+    //           body: JSON.stringify({ querry }),
+    //           headers: {
+    //             "Content-Type": "application/json",
+    //           },
+    //         }
+    //       );
+    //       if (!response.ok) {
+    //         console.log("Cant update");
+    //       }
+    //       const data = await response.json();
+    //       setIsFeatured(data.isFeatured);
+    //       console.log({ isFeatured, functiom: "function" });
+    //     } catch (error) {
+    //       console.log("Update error");
+    //     }
+   
   };
   const unStarButtonHandler = async () => {
-
+    
+    dispatch(eventSliceActions.isFeatured({id:event._id,isFeatured:event.isFeatured}));
   };
   const eventNameClickHandler = () => {
     console.log("Clicked");
@@ -140,12 +143,12 @@ const EventComponent: React.FC<EventProps> = (props) => {
             </div>
             <div className="mr-3">
               {event.isFeatured && (
-                <button type="button" onClick={starButtonHandler}>
+                <button type="button" onClick={unStarButtonHandler}>
                   <FontAwesomeIcon icon={faStar} />
                 </button>
               )}
               {!event.isFeatured && (
-                <button type="button" onClick={unStarButtonHandler}>
+                <button type="button" onClick={starButtonHandler}>
                   {" "}
                   <FontAwesomeIcon icon={faStarOfDavid} />
                 </button>
