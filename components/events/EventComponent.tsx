@@ -8,6 +8,7 @@ import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { eventSliceActions } from "@/store/events-slice";
+import { starButtonProcess } from "@/store/events-action";
 
 interface EventProps {
   eventDetails:{
@@ -31,13 +32,13 @@ const EventComponent: React.FC<EventProps> = (props) => {
   const urlPath = router.pathname;
   const event = props.eventDetails;
   const dispatch =useAppDispatch();
-  const isFetaurSelector = useAppSelector(state=>state.events.isFeatured);
+  const isFetaurSelector = useAppSelector(state=>state.events.featuredEvents);
   // const [isFeatured, setIsFeatured] = useState<boolean>(event.isFeatured);
   const [deleteButton, setDeleteButton] = useState(false);
-
+  // console.log(isFetaurSelector);
   const starButtonHandler = async () => {
-    dispatch(eventSliceActions.isFeatured({id:event._id,isFeatured:event.isFeatured}));
-    // console.log();
+    dispatch(starButtonProcess({id:event._id,isFeatured:event.isFeatured}));
+    // console.log(isFetaurSelector);
     // const querry = {
     //       userId: ,
     //       isFeatured: isFeatured,

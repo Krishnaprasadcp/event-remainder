@@ -30,6 +30,25 @@ export const fetchAllEventData = (userId:string)=>{
         }
     }
 }
-
+interface StarButtonProp{
+    id:string;
+    isFeatured:boolean;
+}
+export const starButtonProcess =(featureEvent:StarButtonProp)=>{
+    return async(dispatch:AppDispatch)=>{
+        const editFetch=async()=>{
+            const response  = await fetch("")
+        }
+        try{
+            const editFeature = await editFetch();
+            dispatch(eventSliceActions.isFeatured(featureEvent))
+        }
+        catch(err){
+            console.log(err);
+            
+        }
+        
+    }
+}
 
 
