@@ -1,5 +1,6 @@
 import connectToDatabase from "@/lib/db";
 import UserModel from "@/lib/models/user";
+import { Types } from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface ID{
@@ -11,7 +12,8 @@ async function handler(req:NextApiRequest,res:NextApiResponse){
             const db = await connectToDatabase();
             if(db){
                 const {userId}:ID = req.body;
-                const userData = await UserModel.findOne({userId});
+                const objectId = new Types.ObjectId(userId);
+                const userData = await UserModel.findOne({_id:objectId});
                 
                 res.status(200).json(userData);
             }    

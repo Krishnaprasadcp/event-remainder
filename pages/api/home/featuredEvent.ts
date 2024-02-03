@@ -1,18 +1,20 @@
 import connectToDatabase from "@/lib/db";
 import eventModel from "@/lib/models/event";
 import { NextApiRequest, NextApiResponse } from "next";
+import { Types } from "mongoose";
 
 async function handler(req:NextApiRequest,res:NextApiResponse){
     if(req.method==="PATCH"){
-        const {querry} = req.body;
-        const {userId,isFeatured} = querry;
         
+        const {featuredEvent} = req.body;
+        const {id,isFeatured,userId} = featuredEvent;
+        const objectId = new Types.ObjectId(id)
         const db = await connectToDatabase();
         if(db){
             if(isFeatured === true){
                 console.log({isFeatured,message:"starred"});
                 
-                const updatedData =await eventModel.findByIdAndUpdate(userId,{isFeatured:false},{new:true});
+                const updatedData =await eventModel.findOneAndUpdate({_id:objectId},{isFeatured:false},{new:true});
                 if(!updatedData){
                     return res.status(404).json({ error: 'User not found' });
                 }
@@ -23,7 +25,8 @@ async function handler(req:NextApiRequest,res:NextApiResponse){
                 console.log({isFeatured,message:"unstarred"});
                 
                 
-                const updatedData =await eventModel.findByIdAndUpdate(userId,{isFeatured:true},{new:true});
+                const updatedData =await eventModel.findOneAndUpdate({_id:objectId},{isFeatured:true},{new:true});
+                
                 if(!updatedData){
                     return res.status(404).json({ error: 'User not found' });
                 }

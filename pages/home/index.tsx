@@ -1,6 +1,7 @@
 import EventComponent from "@/components/events/EventComponent";
 import { fetchAllEventData } from "@/store/events-action";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { userDataFetch } from "@/store/user-actions";
 import { NextPage } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -32,10 +33,12 @@ interface PROPDATA {
 
 const Home: NextPage<PROPDATA> = (props:PROPDATA): JSX.Element => {
   const dispatch = useAppDispatch();
-  const userId = props.userId;
-  
+  const userId = props.userId;  
   const allData = useAppSelector(state=>state.events.allEvents);
-  
+  const userData = useAppSelector(state=>state.user);
+  useEffect(()=>{
+    dispatch(userDataFetch(userId))
+  },[dispatch])
   useEffect(()=>{
     dispatch(fetchAllEventData(userId))
   },[dispatch])
@@ -43,7 +46,7 @@ const Home: NextPage<PROPDATA> = (props:PROPDATA): JSX.Element => {
   return (
     <>
       <p className="font-irish text-4xl m-14">
-        Welcom <span className="block">Krishnaprasad!</span>
+        Welcom <span className="block">{userData.firstName} {userData.lastName}!</span>
       </p>
       <div className="flex justify-between w-full">
         <div className="w-full bg-border-orange h-0.5"></div>

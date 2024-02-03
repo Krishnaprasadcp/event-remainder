@@ -8,7 +8,7 @@ import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { eventSliceActions } from "@/store/events-slice";
-import { starButtonProcess } from "@/store/events-action";
+import { starButtonProcess, unStartButtonProcess } from "@/store/events-action";
 
 interface EventProps {
   eventDetails:{
@@ -28,7 +28,7 @@ interface EventProps {
 
 const EventComponent: React.FC<EventProps> = (props) => {
   const router = useRouter();
-
+  
   const urlPath = router.pathname;
   const event = props.eventDetails;
   const dispatch =useAppDispatch();
@@ -37,37 +37,11 @@ const EventComponent: React.FC<EventProps> = (props) => {
   const [deleteButton, setDeleteButton] = useState(false);
   // console.log(isFetaurSelector);
   const starButtonHandler = async () => {
-    dispatch(starButtonProcess({id:event._id,isFeatured:event.isFeatured}));
-    // console.log(isFetaurSelector);
-    // const querry = {
-    //       userId: ,
-    //       isFeatured: isFeatured,
-    //     };
-    //     try {
-    //       const response = await fetch(
-    //         "http://localhost:3000/api/home/featuredEvent",
-    //         {
-    //           method: "PATCH",
-    //           body: JSON.stringify({ querry }),
-    //           headers: {
-    //             "Content-Type": "application/json",
-    //           },
-    //         }
-    //       );
-    //       if (!response.ok) {
-    //         console.log("Cant update");
-    //       }
-    //       const data = await response.json();
-    //       setIsFeatured(data.isFeatured);
-    //       console.log({ isFeatured, functiom: "function" });
-    //     } catch (error) {
-    //       console.log("Update error");
-    //     }
-   
+    dispatch(starButtonProcess({id:event._id,isFeatured:event.isFeatured,userId:event.userId}));   
   };
   const unStarButtonHandler = async () => {
     
-    dispatch(eventSliceActions.isFeatured({id:event._id,isFeatured:event.isFeatured}));
+    dispatch(unStartButtonProcess({id:event._id,isFeatured:event.isFeatured,userId:event.userId}));
   };
   const eventNameClickHandler = () => {
     console.log("Clicked");

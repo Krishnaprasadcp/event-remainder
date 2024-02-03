@@ -1,8 +1,10 @@
+import { useAppSelector } from "@/store/hooks";
 import { GetServerSidePropsContext, NextPage } from "next";
 import { getSession } from "next-auth/react";
 import Image from "next/image";
 
 const Profile:NextPage =():JSX.Element=>{
+    const userData = useAppSelector(state=>state.user);
     return(
         <>
             <div className="grid justify-items-center gap-6">
@@ -10,25 +12,22 @@ const Profile:NextPage =():JSX.Element=>{
                 <Image className="h-full w-full object-cover rounded-full" src="/images/image.png" width={320} height={320} alt="profile image" />
                 </div>
                 <div className="mt-8">
-                    <p>Krishnaprasad</p>
+                    <p>{userData.firstName} {userData.lastName}</p>
                 </div>
                 <div>
-                    <p>Email:Kp@gmail.com</p>
+                    <p>Email:{userData.email}</p>
                 </div>
                 <div>
-                    <p>Phone no:965845245</p>
+                    <p>Phone no:{userData.phoneNumber}</p>
                 </div>
                 <div>
-                    <p>Gender:Male</p>
+                    <p>Gender:{userData.gender}</p>
                 </div>
                 <div>
-                    <p>Age:21</p>
+                    <p>Age:{userData.age}</p>
                 </div>
                 <div>
-                    <p>Address:Murukjumpuzha Pala</p>
-                </div>
-                <div>
-                    <p>User Id:jdbdyuwdb61154dm</p>
+                    <p>User Id:{userData._id}</p>
                 </div>
             </div>
         </>
@@ -52,13 +51,3 @@ export const getServerSideProps = async(context:GetServerSidePropsContext)=>{
         }
     }
 }
-// export async function getServerSideProps(context:GetServerSidePropsContext){
-//     const session = await getSession({req:context.req});
-//     if(!session){
-//         return{
-//             redirect:{
-                
-//             }
-//         }
-//     }
-// }
