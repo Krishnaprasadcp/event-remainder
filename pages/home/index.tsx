@@ -4,8 +4,8 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { userDataFetch } from "@/store/user-actions";
 import { NextPage } from "next";
 import { getSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import { Fragment, useEffect } from "react";
+import EditData from "../../components/events/editEventData";
 
 
 type EVENTDATA={
@@ -34,6 +34,7 @@ interface PROPDATA {
 const Home: NextPage<PROPDATA> = (props:PROPDATA): JSX.Element => {
   const dispatch = useAppDispatch();
   const userId = props.userId;  
+
   const allData = useAppSelector(state=>state.events.allEvents);
   const userData = useAppSelector(state=>state.user);
   useEffect(()=>{
@@ -67,6 +68,7 @@ const Home: NextPage<PROPDATA> = (props:PROPDATA): JSX.Element => {
           ))}
           </div>}
       </div>
+     
     </>
   );
 };

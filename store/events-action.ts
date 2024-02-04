@@ -72,3 +72,33 @@ export const unStartButtonProcess = (featuredEvent: StarButtonProp) => {
     }
   };
 };
+
+export const deleteButtonProcess = (deleteId:string)=>{
+    console.log(deleteId);
+    
+    return async(dispatch:AppDispatch)=>{
+        const deleteHandler=async()=>{
+            const response  =await fetch("http://localhost:3000/api/home/events",{
+                method:"DELETE",
+                body:JSON.stringify({deleteId}),
+                headers:{
+                    "Content-Type": "application/json",
+                }
+            });
+            if(!response.ok){
+                console.log("error handlerd");
+                
+            }
+            const data = await response.json();
+            return data;
+        }
+        try {
+            const response = await deleteHandler();
+
+            dispatch(eventSliceActions.deleteEvent(response));
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
+} 

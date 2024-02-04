@@ -7,6 +7,7 @@ export default function Document() {
         <title>Event Remainder</title>
       <body className='bg-black text-white'>
         <Main />
+        <div id='editPortal' />
         <NextScript />
       </body>
     </Html>

@@ -28,3 +28,6 @@
 .addeventinput{
   @apply  bg-neutral-950 w-full rounded-md  placeholder:text-white h-9 px-4 border border-zinc-50;
 }
+.overlayColor{
+  background-color: rgba(0, 0, 0, 0.7);
+}

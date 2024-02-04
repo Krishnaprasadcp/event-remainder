@@ -1,4 +1,5 @@
 import mongoose,{Schema,Document} from "mongoose";
+import UserModel from "./user";
 interface Event extends Document{
     eventName:string;
     eventDescription:string;
@@ -42,6 +43,25 @@ const eventSchema=new Schema<Event>({
 {
     timestamps:true
 });
+
+eventSchema.pre('findOneAndDelete',async function(next:any){
+    const event = this as any;
+    console.log(event);
+    console.log(event.userId);
+    
+    
+    try{
+       const user =  await UserModel.findByIdAndDelete(event.userId,{$pull:{events:event._id}});
+       if (!user) {
+        console.error('User not found');
+    }
+    next();
+    }
+    catch(err){
+        console.log(err);
+        next(err)
+    }
+})
 
 const eventModel =mongoose.models.event || mongoose.model<Event>('event',eventSchema);
 export default eventModel;

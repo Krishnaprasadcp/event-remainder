@@ -1,4 +1,5 @@
 import EventComponent from "@/components/events/EventComponent";
+import EditData from "@/components/events/editEventData";
 // import { fetchAllEventData } from "@/store/events-action";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { GetServerSidePropsContext } from "next";
@@ -28,8 +29,10 @@ interface PROPS {
 const AllEvents: React.FC<PROPS> = (props: PROPS) => {
   // const dispatch = useAppDispatch();
   const eventData = useAppSelector((state) => state.events.allEvents);
-
-  // const userId = props.userId;
+  const userData = useAppSelector(state=>state.user);
+  const isOpen = useAppSelector(state=>state.events.isOpen);
+ console.log(eventData);
+ 
 
   const router = useRouter();
   const addEventButton = () => {
@@ -43,7 +46,7 @@ const AllEvents: React.FC<PROPS> = (props: PROPS) => {
       <div className="flex justify-between w-full mt-16 relative">
         <div className="w-2/4 mx-9 -mt-4">
           <p className="font-irish text-4xl ">
-            Welcome <span className="block">Kp</span>
+            Welcome <span className="block">{userData.firstName} {userData.lastName}</span>
           </p>
         </div>
         <div className="w-full bg-border-orange h-0.5 mt-3"></div>
@@ -63,6 +66,11 @@ const AllEvents: React.FC<PROPS> = (props: PROPS) => {
             <EventComponent eventDetails={eventDetails} />
           </div>
         ))}
+      </div>
+      <div>
+        {isOpen && <EditData>
+          Helloo
+        </EditData>}
       </div>
     </>
   );

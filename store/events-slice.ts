@@ -30,13 +30,21 @@ interface EventsState {
   featuredEvents: FEATURED[];
   allEvents: RecievedFetchData[];
   isFound: boolean;
-
+  isOpen:boolean;
 }
 const initialEventsState: EventsState = {
   featuredEvents: [],
   allEvents: [],
   isFound: false,
+  isOpen:false
 };
+interface DELETEDATA{
+  deletedData:{
+    id:string,
+    userId:string;
+  };
+  message:string;
+}
 const eventsSlice = createSlice({
   name: "events",
   initialState: initialEventsState,
@@ -55,17 +63,25 @@ const eventsSlice = createSlice({
         state.allEvents.push(action.payload);
       }
     },
-
+    deleteEvent:(state,action:PayloadAction<DELETEDATA>)=>{
+      const deletedId = action.payload.deletedData;
+      state.allEvents = state.allEvents.filter(item=>item._id !==deletedId.id );
+       
+    },
+    editEvent:(state)=>{
+      state.isOpen = !state.isOpen;
+    },
     isFeatured: (state, action: PayloadAction<FEATURED>) => {
       const featureData = {
         id: action.payload.id,
         isFeatured: action.payload.isFeatured,
       };
+    
       const existingFeaturedEvent = state.featuredEvents.find(
         (item) => item.id === featureData.id
       );
+      
       if (existingFeaturedEvent) {
-        console.log(existingFeaturedEvent.id);
         const event = state.allEvents.find(
           (item) => item._id === existingFeaturedEvent.id
         );

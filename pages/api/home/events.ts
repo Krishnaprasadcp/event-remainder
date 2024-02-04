@@ -1,5 +1,7 @@
 import connectToDatabase from "@/lib/db";
 import eventModel from "@/lib/models/event";
+import UserModel from "@/lib/models/user";
+import { Types } from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface ID{
@@ -26,15 +28,28 @@ async function handler(req:NextApiRequest,res:NextApiResponse){
         }
     }
     if(req.method === "DELETE"){
-        const eventId = req.body.eventId;
+        const id = req.body.deleteId;
+        
+        const objectId=new Types.ObjectId(id);
+        
         try{
-            const deletedEvent = await eventModel.findOneAndDelete(eventId);
+            const deletedEvent:any =await eventModel.findOneAndDelete({_id:objectId});
+            // await deletedEvent.exec();
         if(!deletedEvent){
             return  res.status(404).json({message:"Event cant be deletd"});
         }
-        res.status(200).json({message:"Event deleted"});
+     
+        
+        const resDeleteData={
+            id:deletedEvent._id,
+            userId:deletedEvent.userId
+        }
+        console.log(resDeleteData);
+        res.status(200).json({deletedData:resDeleteData,message:"Event deleted"});
         }
         catch(error){
+            // console.log(error);
+            
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
