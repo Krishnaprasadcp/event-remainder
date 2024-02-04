@@ -8,23 +8,28 @@ import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { eventSliceActions } from "@/store/events-slice";
-import { deleteButtonProcess, starButtonProcess, unStartButtonProcess } from "@/store/events-action";
+import {
+  deleteButtonProcess,
+  editEventForm,
+  starButtonProcess,
+  unStartButtonProcess,
+} from "@/store/events-action";
 import EditData from "@/components/events/editEventData";
 
 interface EventProps {
-  eventDetails:{
+  eventDetails: {
     _id: string;
-  eventName: string;
-  eventDescription: string;
-  eventDate: string;
-  eventTime: string;
-  imageData: string | undefined;
-  isConsecutiveYear: boolean;
-  isFeatured: boolean;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
-  }
+    eventName: string;
+    eventDescription: string;
+    eventDate: string;
+    eventTime: string;
+    imageData: string | undefined;
+    isConsecutiveYear: boolean;
+    isFeatured: boolean;
+    userId: string;
+    createdAt: string;
+    updatedAt: string;
+  };
 }
 
 const EventComponent: React.FC<EventProps> = (props) => {
@@ -32,31 +37,43 @@ const EventComponent: React.FC<EventProps> = (props) => {
 
   const urlPath = router.pathname;
   const event = props.eventDetails;
-  const dispatch =useAppDispatch();  
+  const dispatch = useAppDispatch();
   const starButtonHandler = async () => {
-    dispatch(starButtonProcess({id:event._id,isFeatured:event.isFeatured,userId:event.userId}));   
+    dispatch(
+      starButtonProcess({
+        id: event._id,
+        isFeatured: event.isFeatured,
+        userId: event.userId,
+      })
+    );
   };
   const unStarButtonHandler = async () => {
-    
-    dispatch(unStartButtonProcess({id:event._id,isFeatured:event.isFeatured,userId:event.userId}));
+    dispatch(
+      unStartButtonProcess({
+        id: event._id,
+        isFeatured: event.isFeatured,
+        userId: event.userId,
+      })
+    );
   };
   const eventNameClickHandler = () => {
     console.log("Clicked");
   };
 
   const deleteButtonHandler = async () => {
-    console.log(event._id);
-    
     dispatch(deleteButtonProcess(event._id));
   };
-  const editEventHandler = ()=>{
+  const editEventHandler = async () => {
     console.log("clciked");
-    
+    const editEvent = {
+      id: event._id,
+      userId: event.userId,
+    };
+    dispatch(editEventForm({id: event._id,userId: event.userId}));
     dispatch(eventSliceActions.editEvent());
-    
-  }
+  };
   const bgColor = urlPath === "/home" ? "bg-zinc-900" : "bg-yellow-600";
-  
+
   return (
     <Fragment>
       <div

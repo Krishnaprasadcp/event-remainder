@@ -102,3 +102,13 @@ export const deleteButtonProcess = (deleteId:string)=>{
         }
     }
 } 
+interface EditEventProp{
+      id:string,
+      userId:string
+  }
+export const editEventForm=(editEvent:EditEventProp)=>{
+    return async(dispatch:AppDispatch)=>{
+        dispatch(eventSliceActions.editEventForm({id:editEvent.id,userId:editEvent.userId}))
+        
+    }
+} 

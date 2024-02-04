@@ -26,18 +26,29 @@ interface FEATURED {
   id: string;
   isFeatured: boolean;
 }
+interface EditEventProp{
+ 
+    id:string,
+    userId:string
+}
 interface EventsState {
   featuredEvents: FEATURED[];
   allEvents: RecievedFetchData[];
-  isFound: boolean;
   isOpen:boolean;
+  editEvent:EditEventProp;
+  isChanged:boolean;
 }
 const initialEventsState: EventsState = {
   featuredEvents: [],
   allEvents: [],
-  isFound: false,
-  isOpen:false
+  isOpen:false,
+  editEvent:{
+    id:"",
+    userId:""
+  },
+  isChanged:false
 };
+
 interface DELETEDATA{
   deletedData:{
     id:string,
@@ -70,6 +81,22 @@ const eventsSlice = createSlice({
     },
     editEvent:(state)=>{
       state.isOpen = !state.isOpen;
+      state.isChanged = true;
+    },
+    editEventForm:(state,action:PayloadAction<EditEventProp>)=>{
+      const ids = action.payload;
+      state.editEvent.id =ids.id;
+      state.editEvent.userId = ids.userId;
+    },
+    editEventData:(state,action:PayloadAction<RecievedFetchData>)=>{
+      const updatedArray = action.payload;
+      const newArray = state.allEvents.find(item=>item._id === action.payload._id);
+      newArray!.eventName = updatedArray.eventName;
+      newArray!.eventDescription = updatedArray.eventDescription;
+      newArray!.eventDate = updatedArray.eventDate;
+      newArray!.eventTime = updatedArray.eventTime;
+      newArray!.isConsecutiveYear = updatedArray.isConsecutiveYear;
+      
     },
     isFeatured: (state, action: PayloadAction<FEATURED>) => {
       const featureData = {

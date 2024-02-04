@@ -37,12 +37,13 @@ const Home: NextPage<PROPDATA> = (props:PROPDATA): JSX.Element => {
 
   const allData = useAppSelector(state=>state.events.allEvents);
   const userData = useAppSelector(state=>state.user);
+  const changed = useAppSelector(state=>state.events.isChanged);
   useEffect(()=>{
     dispatch(userDataFetch(userId))
   },[dispatch])
   useEffect(()=>{
     dispatch(fetchAllEventData(userId))
-  },[dispatch])
+  },[dispatch,changed])
   let eventData = allData.filter(event=>event.isFeatured === true);
   return (
     <>
