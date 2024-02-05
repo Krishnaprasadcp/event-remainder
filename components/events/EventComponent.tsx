@@ -15,6 +15,7 @@ import {
   unStartButtonProcess,
 } from "@/store/events-action";
 import EditData from "@/components/events/editEventData";
+import { CldImage } from "next-cloudinary";
 
 interface EventProps {
   eventDetails: {
@@ -82,7 +83,7 @@ const EventComponent: React.FC<EventProps> = (props) => {
         <div className="row-start-1 p-4">
           <Image
             className="border border-border-orange cursor-pointer hover:w-hoverImageWidth focus:h-24"
-            src="/images/image.png"
+            src={event.imageData!}
             width={180}
             height={200}
             alt="event-image"

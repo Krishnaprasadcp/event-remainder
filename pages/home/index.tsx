@@ -5,7 +5,6 @@ import { userDataFetch } from "@/store/user-actions";
 import { NextPage } from "next";
 import { getSession } from "next-auth/react";
 import { Fragment, useEffect } from "react";
-import EditData from "../../components/events/editEventData";
 
 
 type EVENTDATA={
@@ -45,6 +44,8 @@ const Home: NextPage<PROPDATA> = (props:PROPDATA): JSX.Element => {
     dispatch(fetchAllEventData(userId))
   },[dispatch,changed])
   let eventData = allData.filter(event=>event.isFeatured === true);
+
+
   return (
     <>
       <p className="font-irish text-4xl m-14">
@@ -86,7 +87,24 @@ export const getServerSideProps = async (context: any) => {
     };
   }
   const userId = session.user!.name;
+  // const response = await fetch("https://api.cloudinary.com/v1_1/dhkrvyhf0/resources/image",{
+  //       headers:{
+  //         Authorization:`Basic ${Buffer.from(process.env.NEXT_API_KEY_CLOUDINARY + ':' + process.env.NEXT_API_SECRET_KEY).toString('base64')}`
+  //       }
+  //     }).then(r=>r.json());
 
+  //     console.log(response);
+  //     const {resources} = response;
+  //     const images = resources.map((item: { asset_id?: any; public_id?: any; secure_url?: any; width?: any; height?: any; })=>{
+  //       const {width,height} = item;
+  //       return{
+  //         id:item.asset_id,
+  //         title:item.public_id,
+  //         image:item.secure_url,
+  //         width,
+  //         height
+  //       }
+  //     })
   return {
     props: { userId }
   };

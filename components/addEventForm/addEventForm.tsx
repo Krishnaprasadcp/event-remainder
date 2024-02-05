@@ -1,3 +1,4 @@
+import { CldUploadButton } from "next-cloudinary";
 import React, { useRef, useState } from "react";
 
 type EventData = {
@@ -5,7 +6,7 @@ type EventData = {
   eventDescription: string;
   eventDate: string;
   eventTime: string;
-  imageData: string | undefined;
+  imageData: any;
   isConsecutiveYear: boolean;
 };
 type NewEventProps = {
@@ -18,15 +19,29 @@ const AddEventForm: React.FC<NewEventProps> = (props) => {
   const eventDateInputRef = useRef<HTMLInputElement>(null);
   const eventTimeInputRef = useRef<HTMLInputElement>(null);
 
-  const [imageData, setImageData] = useState<string | undefined>();
+  const [uploadImageData, setImageData] = useState<File | undefined>(undefined);
   const [isConsecutiveYear, setConsecutiveYear] = useState(false);
-  const formSubmitHandler = (event: React.FormEvent) => {
+  const formSubmitHandler = async(event: React.FormEvent) => {
     event.preventDefault();
+  
+    
     const eventName = eventNameInputRef.current!.value;
     const eventDescription = eventDescriptionInputRef.current!.value;
     const eventDate = eventDateInputRef.current!.value;
     const eventTime = eventTimeInputRef.current!.value;
+    const sendImageData = new FormData();
+    sendImageData.append('file',uploadImageData ?? '');
+    const response = await fetch("/api/home/imageUpload",{
+      method:"POST",
+      body:sendImageData
+    });
+    if(!response.ok){
+      console.log("errroe");
+      
+    }
+    const imageData = await response.json();
 
+    
     const eventData: EventData = {
       eventName,
       eventDescription,
@@ -35,20 +50,13 @@ const AddEventForm: React.FC<NewEventProps> = (props) => {
       imageData,
       isConsecutiveYear,
     };
+
+    
     props.onAddEvent(eventData);
   };
-  const convertToBase64 = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    let reader = new FileReader();
-    if (event.target.files && event.target.files.length > 0) {
-      reader.readAsDataURL(event.target.files[0]);
-      reader.onload = () => {
-        setImageData(reader.result as string);
-      };
-      reader.onerror = (error) => {
-        console.log("Error", error);
-      };
-    }
+  const imageFileHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    setImageData(file);
   };
   const consecutiveYaerCheckBoxHandler = () => {
     setConsecutiveYear((prevState) => !prevState);
@@ -104,11 +112,12 @@ const AddEventForm: React.FC<NewEventProps> = (props) => {
           <div className="addeventdiv">
             <input
               className="addeventinput"
-              accept="image/*"
+              // accept="image/*"
               type="file"
-              id="image"
-              onChange={convertToBase64}
+
+              onChange={imageFileHandler}
             />
+            {/* <CldUploadButton uploadPreset="yllcr7s8" signatureEndpoint={}/> */}
           </div>
           <div className="border border-zinc-50 w-10/12 rounded-md h-9">
             <label className="p-4" htmlFor="consecutiveyear">

@@ -68,11 +68,9 @@ const eventsSlice = createSlice({
       }));
     },
     addEvent: (state, action: PayloadAction<RecievedFetchData>) => {
-      if (state.allEvents.length <= 0) {
-        console.log("hiii");
-      } else {
+  
         state.allEvents.push(action.payload);
-      }
+    
     },
     deleteEvent:(state,action:PayloadAction<DELETEDATA>)=>{
       const deletedId = action.payload.deletedData;

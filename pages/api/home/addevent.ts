@@ -23,7 +23,7 @@ async function handler(req:NextApiRequest,res:NextApiResponse){
         const userId = data.userId;
         const {eventName,eventDescription,eventDate,eventTime,imageData,isConsecutiveYear} = data.eventData;
     
-        console.log(userId);
+        console.log(imageData);
         console.log(eventDate);
         
         
@@ -32,7 +32,7 @@ async function handler(req:NextApiRequest,res:NextApiResponse){
             eventDescription,
             eventDate,
             eventTime,
-            imageData,
+            imageData:imageData.fileUrl,
             isConsecutiveYear,
             isFeatured:false,
             userId:userId

@@ -12,7 +12,9 @@ interface EventData {
   eventDescription: string;
   eventDate: string;
   eventTime: string;
-  imageData: string | undefined;
+  imageData:{
+    fileUrl:string;
+  }
   isConsecutiveYear: boolean;
 }
 interface ERROR {
