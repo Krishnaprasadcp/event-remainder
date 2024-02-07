@@ -34,8 +34,7 @@ const authOptions: NextAuthOptions = {
       
         
         const user = {id:userData._id.toString(),email:email,name:userData._id.toString()}
-        console.log(user);
-        
+    
         return user;
       },
     }),

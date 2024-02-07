@@ -5,11 +5,13 @@ import Image from "next/image";
 
 const Profile:NextPage =():JSX.Element=>{
     const userData = useAppSelector(state=>state.user);
+    console.log(userData);
+    
     return(
         <>
             <div className="grid justify-items-center gap-6">
                 <div className=" mt-16 rounded-full m-auto w-80 h-80">
-                <Image className="h-full w-full object-cover rounded-full" src="/images/image.png" width={320} height={320} alt="profile image" />
+                <Image className="h-full w-full object-cover rounded-full" src={userData.imageData!} width={320} height={320} alt="profile image" />
                 </div>
                 <div className="mt-8">
                     <p>{userData.firstName} {userData.lastName}</p>

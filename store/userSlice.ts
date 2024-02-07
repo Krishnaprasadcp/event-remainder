@@ -5,6 +5,7 @@ interface USERDATA {
   lastName: string;
   age: number;
   phoneNumber: string;
+  imageData:"";
   email: string;
   password: string;
   gender: string;
@@ -16,6 +17,7 @@ const initialUserData: USERDATA = {
     lastName: "",
     age: 0,
     phoneNumber: "",
+    imageData:"",
     email: "",
     password: "",
     gender: "",
@@ -26,12 +28,13 @@ const userSlice = createSlice({
   reducers: {
     userData: (state, action: PayloadAction<USERDATA>) => {
         const data = action.payload;
-        console.log(data.firstName);
+        console.log(data);
         state._id = data._id;
         state.firstName = data.firstName;
         state.lastName = data.lastName;
         state.age = data.age;
         state.phoneNumber = data.phoneNumber;
+        state.imageData = data.imageData;
         state.email = data.email;
         state.password = data.password;
         state.gender= data.gender;

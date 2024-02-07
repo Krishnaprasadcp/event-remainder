@@ -38,6 +38,8 @@ const EventComponent: React.FC<EventProps> = (props) => {
 
   const urlPath = router.pathname;
   const event = props.eventDetails;
+  console.log(event);
+  
   const dispatch = useAppDispatch();
   const starButtonHandler = async () => {
     dispatch(

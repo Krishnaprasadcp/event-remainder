@@ -48,6 +48,16 @@ const AddRemainder: NextPage<PROPS> = (props) => {
       }
       const returnedData = await response.json();
       console.log(returnedData);
+      const eventTimeConfig = {
+        returnedData
+      }
+      // const sendEventTimer =await  fetch("http://localhost:3000/triggerCorn",{
+      //   method:"POST",
+      //   body:JSON.stringify({}),
+      //   headers:{
+      //     "Content-Type":"application/json"
+      //   }
+      // });
       dispatch(eventSliceActions.addEvent(returnedData));
       router.push("/home/allevents");
   };

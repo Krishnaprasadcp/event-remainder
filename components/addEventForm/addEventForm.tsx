@@ -29,30 +29,46 @@ const AddEventForm: React.FC<NewEventProps> = (props) => {
     const eventDescription = eventDescriptionInputRef.current!.value;
     const eventDate = eventDateInputRef.current!.value;
     const eventTime = eventTimeInputRef.current!.value;
-    const sendImageData = new FormData();
-    sendImageData.append('file',uploadImageData ?? '');
-    const response = await fetch("/api/home/imageUpload",{
-      method:"POST",
-      body:sendImageData
-    });
-    if(!response.ok){
-      console.log("errroe");
+    console.log(uploadImageData);
+    if(uploadImageData === undefined){
+      const eventData: EventData = {
+        eventName,
+        eventDescription,
+        eventDate,
+        eventTime,
+        imageData:{fileUrl:"/images/image.png"},
+        isConsecutiveYear,
+      };
+      console.log(eventData);
       
+      props.onAddEvent(eventData);
     }
-    const imageData = await response.json();
-
+    else{
+      const sendImageData = new FormData();
+      sendImageData.append('file',uploadImageData ?? '');
+      const response = await fetch("/api/home/imageUpload",{
+        method:"POST",
+        body:sendImageData
+      });
+      if(!response.ok){
+        console.log("errroe");
+        
+      }
+      const imageData = await response.json();
+      const eventData: EventData = {
+        eventName,
+        eventDescription,
+        eventDate,
+        eventTime,
+        imageData,
+        isConsecutiveYear,
+      };
+      props.onAddEvent(eventData);
+    }
     
-    const eventData: EventData = {
-      eventName,
-      eventDescription,
-      eventDate,
-      eventTime,
-      imageData,
-      isConsecutiveYear,
-    };
-
+   
     
-    props.onAddEvent(eventData);
+    
   };
   const imageFileHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -112,12 +128,10 @@ const AddEventForm: React.FC<NewEventProps> = (props) => {
           <div className="addeventdiv">
             <input
               className="addeventinput"
-              // accept="image/*"
               type="file"
 
               onChange={imageFileHandler}
             />
-            {/* <CldUploadButton uploadPreset="yllcr7s8" signatureEndpoint={}/> */}
           </div>
           <div className="border border-zinc-50 w-10/12 rounded-md h-9">
             <label className="p-4" htmlFor="consecutiveyear">

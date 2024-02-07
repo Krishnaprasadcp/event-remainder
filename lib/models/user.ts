@@ -4,9 +4,11 @@ interface User extends Document{
     lastName:string,
     age:number,
     phoneNumber:string,
+    imageData:string|undefined,
     email:string,
     password:string,
     gender:string,
+    
     events:mongoose.Schema.Types.ObjectId[];
 };
 const userSchema = new Schema<User>({
@@ -25,6 +27,9 @@ const userSchema = new Schema<User>({
     phoneNumber:{
         type:String,
         required:true
+    },
+    imageData:{
+        type:String,
     },
     email:{
         type:String,

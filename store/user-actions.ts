@@ -4,8 +4,6 @@ import { userSliceAction } from "./userSlice";
 export const userDataFetch = (userId: string) => {
   return async (dispatch: AppDispatch) => {
     const fetchUserData = async () => {
-      console.log(userId);
-
       const response = await fetch("http://localhost:3000/api/home/profile", {
         method: "POST",
         body: JSON.stringify({ userId }),

@@ -20,6 +20,8 @@ async function handler(req:NextApiRequest,res:NextApiResponse){
     if(req.method ==="POST"){
         const db =await connectToDatabase();
         const data = req.body;
+        console.log(data);
+        
         const userId = data.userId;
         const {eventName,eventDescription,eventDate,eventTime,imageData,isConsecutiveYear} = data.eventData;
     

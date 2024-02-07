@@ -21,6 +21,7 @@ const AuthForm: React.FC = () => {
   const signUpPasswordInput = useRef<HTMLInputElement>(null);
   const signUpReEnterPasswordInput = useRef<HTMLInputElement>(null);
 
+  const [uploadImageData, setImageData] = useState<File | undefined>(undefined);
   const signUpButtonHandler = () => {
     setIsLogin((prevState) => !prevState);
   };
@@ -40,6 +41,10 @@ const AuthForm: React.FC = () => {
       router.replace("/home");
     }
   };
+  const imageFileHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    setImageData(file);
+  };
   const signUpHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     const firstName = firstNameInput.current!.value;
@@ -49,16 +54,30 @@ const AuthForm: React.FC = () => {
     const phoneNumber = phoneNumberInput.current!.value;
     const email = signUpEmailInput.current!.value;
     const password = signUpPasswordInput.current!.value;
+
+    const sendImageData = new FormData();
+    sendImageData.append('file',uploadImageData ?? '');
+    const imgResponse = await fetch("/api/home/imageUpload",{
+      method:"POST",
+      body:sendImageData
+    });
+    if(!imgResponse.ok){
+      console.log("errroe");
+      
+    }
+    const returndimageData = await imgResponse.json();
     const userData = {
       firstName,
       lastName,
       age,
       phoneNumber,
+      imageData:returndimageData.fileUrl,
       email,
       password,
       gender: genderSelection,
     };
-
+    console.log(userData);
+    
     const response = await fetch("http://localhost:3000/api/signup", {
       method: "POST",
       body: JSON.stringify(userData),
@@ -84,6 +103,7 @@ const AuthForm: React.FC = () => {
       }
     }
   };
+
 
   const genderSelectionHandler = (
     event: React.FormEvent<HTMLSelectElement>
@@ -175,7 +195,6 @@ const AuthForm: React.FC = () => {
                 </p>
               </div>
               <div className=" grid grid-cols-1 place-items-center  w-full gap-8 -mt-16">
-                
                 <div className="passwordinput">
                   <input
                     className="signupdiv"
@@ -215,7 +234,13 @@ const AuthForm: React.FC = () => {
                     placeholder="Phone Number"
                   />
                 </div>
-
+                <div className="passwordinput">
+                  <input
+                    className="signupdiv"
+                    type="file"
+                    onChange={imageFileHandler}
+                  />
+                </div>
                 <div className="passwordinput">
                   <input
                     className="signupdiv"
@@ -247,7 +272,9 @@ const AuthForm: React.FC = () => {
                 </div>
 
                 <div className="border border-zinc-50 rounded-md w-2/5 h-8">
-                  <label className="p-4" htmlFor="gender">Gender</label>
+                  <label className="p-4" htmlFor="gender">
+                    Gender
+                  </label>
                   <select
                     className="bg-black border-none focus:border-none outline-none"
                     name="gender"

@@ -8,6 +8,7 @@ interface Data {
   lastName: string;
   age: number;
   phoneNumber: string;
+  imageData:string;
   email: string;
   password: string;
   gender: string;
@@ -26,6 +27,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           lastName,
           age,
           phoneNumber,
+          imageData,
           email,
           password,
           gender,
@@ -90,6 +92,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           lastName,
           age,
           phoneNumber,
+          imageData,
           email,
           password: hashedPassword,
           gender,
