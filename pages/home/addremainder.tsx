@@ -1,11 +1,13 @@
 import AddEventForm from "@/components/addEventForm/addEventForm";
-import { fetchAllEventData } from "@/store/events-action";
+// import { fetchAllEventData } from "@/store/events-action";
 import { eventSliceActions } from "@/store/events-slice";
+import { useAppSelector } from "@/store/hooks";
+import { uiSliceAction } from "@/store/ui-slice";
 import { GetServerSidePropsContext, NextPage } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 interface EventData {
   eventName: string;
@@ -24,18 +26,16 @@ interface ERROR {
 type PROPS = {
   userId: string;
 };
-interface SendDataProp {
-  formData: EventData;
-  userId: string;
-  // Add other properties as needed
-}
+
 const AddRemainder: NextPage<PROPS> = (props) => {
   const router = useRouter();
   const userId = props.userId;
   const dispatch = useDispatch();
+  const [error,setError] = useState();
+
+  
   
   const addEventHandler = async (eventData: EventData) => {
-    console.log({userId,eventData});
     const response = await fetch("http://localhost:3000/api/home/addevent", {
         method: "POST",
         body: JSON.stringify({ userId, eventData }),
@@ -44,22 +44,28 @@ const AddRemainder: NextPage<PROPS> = (props) => {
         },
       });
       if (!response.ok) {
-        console.log("Cant insert the event");
+        const errorData:ERROR = await response.json();
+        console.log(errorData);
+        
+        dispatch(uiSliceAction.showNotification(errorData));
       }
-      const returnedData = await response.json();
-      console.log(returnedData);
-      const eventTimeConfig = {
-        returnedData
+      else{
+        const returnedData = await response.json();
+        console.log(eventData);
+   
+        const sendEventTimer =await  fetch("http://localhost:3001/triggerCorn",{
+          method:"POST",
+          body:JSON.stringify({eventData}),
+          headers:{
+            "Content-Type":"application/json"
+          }
+        });
+        const resSendEventTimer = await sendEventTimer.json();
+        console.log(resSendEventTimer);
+        
+        dispatch(eventSliceActions.addEvent(returnedData));
+        router.push("/home/allevents");
       }
-      // const sendEventTimer =await  fetch("http://localhost:3000/triggerCorn",{
-      //   method:"POST",
-      //   body:JSON.stringify({}),
-      //   headers:{
-      //     "Content-Type":"application/json"
-      //   }
-      // });
-      dispatch(eventSliceActions.addEvent(returnedData));
-      router.push("/home/allevents");
   };
   
   return (

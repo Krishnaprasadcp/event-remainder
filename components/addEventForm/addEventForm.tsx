@@ -1,5 +1,8 @@
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { uiSliceAction } from "@/store/ui-slice";
 import { CldUploadButton } from "next-cloudinary";
 import React, { useRef, useState } from "react";
+import ErrorNotification from "../errorHandler/errorNotification";
 
 type EventData = {
   eventName: string;
@@ -18,6 +21,7 @@ const AddEventForm: React.FC<NewEventProps> = (props) => {
   const eventDescriptionInputRef = useRef<HTMLTextAreaElement>(null);
   const eventDateInputRef = useRef<HTMLInputElement>(null);
   const eventTimeInputRef = useRef<HTMLInputElement>(null);
+  const dispatch = useAppDispatch();
 
   const [uploadImageData, setImageData] = useState<File | undefined>(undefined);
   const [isConsecutiveYear, setConsecutiveYear] = useState(false);
@@ -77,6 +81,11 @@ const AddEventForm: React.FC<NewEventProps> = (props) => {
   const consecutiveYaerCheckBoxHandler = () => {
     setConsecutiveYear((prevState) => !prevState);
   };
+
+  const errorClearer =()=>{
+
+    dispatch(uiSliceAction.showNotification({message:"",statusCode:null}));
+  }
   return (
     <div className=" w-full">
       <form onSubmit={formSubmitHandler}>
@@ -97,6 +106,7 @@ const AddEventForm: React.FC<NewEventProps> = (props) => {
               ref={eventNameInputRef}
               placeholder="Event name"
             />
+                
           </div>
           <div className="addeventdiv">
             <textarea
@@ -145,18 +155,16 @@ const AddEventForm: React.FC<NewEventProps> = (props) => {
             />
           </div>
           <div className="bg-inputdivcolor rounded-md w-10/12 text-center h-8 mt-12">
-            <button className="w-full" type="submit">
+            <button onClick={errorClearer} className="w-full" type="submit">
               SUBMIT
             </button>
           </div>
         </div>
+        <ErrorNotification />
       </form>
+     
     </div>
   );
 };
 export default AddEventForm;
-{
-  /* <div>
-        {imageData=="" || imageData==undefined ?"":<img src={imageData} alt="image" width={200} height={200} />}
-      </div> */
-}
+

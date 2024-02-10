@@ -27,7 +27,18 @@ async function handler(req:NextApiRequest,res:NextApiResponse){
     
         console.log(imageData);
         console.log(eventDate);
-        
+        if(eventName === ""){
+            res.status(400).json({message:"Event Name Can't be empty",statusCode:400});
+        }
+        if(eventDescription === ""){
+            res.status(400).json({message:"Event Description Can't be empty",statusCode:400});
+        }
+        if(eventDate === ""){
+            res.status(400).json({message:"Event Date Can't be empty",statusCode:400});
+        }
+        if(eventTime === ""){
+            res.status(400).json({message:"Event Time Can't be empty",statusCode:400});
+        }
         
         const event =  new eventModel<EventData>({
             eventName,
