@@ -1,9 +1,10 @@
 import { verifyPassword } from "@/lib/auth";
 import connectToDatabase from "@/lib/db";
 import UserModel from "@/lib/models/user";
-import { NextAuthOptions } from "next-auth";
+import { Account, NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
 const authOptions: NextAuthOptions = {
   session: {
@@ -15,7 +16,7 @@ const authOptions: NextAuthOptions = {
       credentials: {},
       async authorize(credentials) {
         const db = await connectToDatabase();
-
+    
         const { email, password } = credentials as {
           email: string;
           password: string;
@@ -38,7 +39,20 @@ const authOptions: NextAuthOptions = {
         return user;
       },
     }),
+    GoogleProvider({
+      clientId:process.env.CLIENT_ID!,
+      clientSecret:process.env.CLIENT_SECRET!
+    })
   ],
+  // callbacks: {
+  //   async signIn({ account, profile }) {
+  //     if(!profile?.email){
+  //       throw new Error ('No profile')
+  //     }
+  //     return true;
+  //   },
+  // },
+  secret:process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/signin",
   },

@@ -29,6 +29,11 @@ const AuthForm: React.FC = () => {
   const signInButtonHandler = () => {
     setIsLogin((prevState) => !prevState);
   };
+  const googleLoginButtonHanlder =async(event: React.FormEvent)=>{
+    const isLogin = await signIn("google");
+    console.log(isLogin);
+    
+  }
   const loginSubmissionHandler = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -153,7 +158,7 @@ const AuthForm: React.FC = () => {
                   />
                 </div>
                 <div className="rounded-md border border-border-orange w-2/5 h-9">
-                  <button className=" w-full text-start px-3" type="button">
+                  <button onClick={googleLoginButtonHanlder} className=" w-full text-start px-3" type="button">
                     Login with google
                   </button>
                 </div>

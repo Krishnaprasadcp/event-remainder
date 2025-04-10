@@ -77,7 +77,7 @@ const Home: NextPage<PROPDATA> = (props:PROPDATA): JSX.Element => {
 export default Home;
 export const getServerSideProps = async (context: any) => {
   const session = await getSession({ req: context.req });
-
+  
   if (!session) {
     return {
       redirect: {
